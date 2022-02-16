@@ -41,7 +41,7 @@ namespace Neac.Api.Controllers
                     .Where(type => typeof(ControllerBase).IsAssignableFrom(type))
                     .SelectMany(type => type.GetMethods(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public))
                     .Where(m => !m.GetCustomAttributes(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), true).Any())
-                    .Where(m => !m.CustomAttributes.Any(n => n.AttributeType == typeof(AllowAnonymousAttribute)))
+                    .Where(m => !m.CustomAttributes.Any(n => n.AttributeType == typeof(AllowAnonymousAttribute)) && !m.CustomAttributes.Any(n => n.AttributeType == typeof(AuthorizeAttribute)))
                     .Select(x => new Role
                     {
                         RoleCode = x.DeclaringType.Name.Replace("Controller", "") + "-" + x.Name,
@@ -60,7 +60,7 @@ namespace Neac.Api.Controllers
             return await _roleRepository.UpdateUserRole(request);
         }
 
-        [RoleDescription("Lấy danh sách quyền theo tài khoản")]
+        [Authorize]
         [Route("get-user-role/{userId}")]
         [HttpGet]
         public async Task<Response<GetRolesByUserDtos>> GetUserRole(Guid userId)
@@ -68,7 +68,7 @@ namespace Neac.Api.Controllers
             return await _roleRepository.GetUserRole(userId);
         }
 
-        [RoleDescription("Lấy danh sách quyền và quyền đã chọn")]
+        [Authorize]
         [Route("decentralizated-role/{userId}")]
         [HttpGet]
         public async Task<Response<GetRolesAndGroupDto>> DecentralizatedRole(Guid userId)

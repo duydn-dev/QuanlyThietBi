@@ -84,13 +84,15 @@ namespace Neac.BusinessLogic.Repository
                 var listGroupRole = _unitOfWork.GetRepository<GroupRole>().GetAll();
                 UserCreateDto currentUser = (!isInit) ? await _userRepository.GetIdentityUser() : new UserCreateDto();
 
+                var redundancyRoles = listRole.Where(n => !roles.Select(n => n.RoleCode).Contains(n.RoleCode));
+                await _unitOfWork.GetRepository<UserRole>().DeleteByExpression(n => redundancyRoles.Select(n => n.RoleId).Contains(n.RoleId.Value));
+                await _unitOfWork.GetRepository<Role>().DeleteRangeAsync(redundancyRoles);
                 // cập nhật lại group user Role
                 await AddOrCreateGroupRoleAsync(groupRoles, listGroupRole);
 
                 // cập nhật lại vào danh sách role
                 foreach (var role in roles)
                 {
-                    
                     var roleCode = await listRole.FirstOrDefaultAsync(n => n.RoleCode == role.RoleCode);
                     if (roleCode != null)
                     {

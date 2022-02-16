@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Neac.Api.Attributes;
 using Neac.BusinessLogic.Contracts;
@@ -32,7 +33,7 @@ namespace Neac.Api.Controllers
             return await _positionRepository.GetUserPositionsAsync(filter);
         }
 
-        [RoleDescription("Lấy dropdown nhóm tài khoản")]
+        [Authorize]
         [Route("dropdown")]
         [HttpGet]
         public async Task<Response<List<PositonGetDropdownViewDto>>> GetUserPositionsDropdownAsync()

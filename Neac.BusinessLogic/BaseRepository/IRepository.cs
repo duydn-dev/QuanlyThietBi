@@ -18,5 +18,7 @@ namespace Neac.BusinessLogic.BaseRepository
         IQueryable<T> GetAll();
         IQueryable<T> GetByExpression(Expression<Func<T, bool>> expression);
         Task<bool> DeleteByExpression(Expression<Func<T, bool>> expression);
+        Task<IQueryable<T>> DeleteRangeAsync(IQueryable<T> entity);
+        Task<IEnumerable<T>> DeleteRangeAsync(IEnumerable<T> entity);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Neac.Api.Attributes;
 using Neac.BusinessLogic.Contracts;
@@ -13,6 +14,7 @@ namespace Neac.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [UserAuthorize]
     [RoleGroupDescription("Quản lý phòng ban")]
     public class DepartmentController : ControllerBase
     {

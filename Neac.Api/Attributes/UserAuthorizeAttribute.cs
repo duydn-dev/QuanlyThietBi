@@ -21,11 +21,31 @@ namespace Neac.Api.Attributes
             if (allowAttr != null)
             {
                 await next();
+                return;
             }
-
+            var authenOnly = (context.ActionDescriptor as ControllerActionDescriptor).MethodInfo.GetCustomAttributes(typeof(AuthorizeAttribute), false).FirstOrDefault();
             if (string.IsNullOrEmpty(context.HttpContext.User.Identity.Name))
             {
-                context.Result = new StatusCodeResult(401);
+                context.Result = new ContentResult()
+                {
+                    StatusCode = 401,
+                    ContentType = "application/json",
+                    Content = "Bạn chưa đăng nhập !"
+                };
+                return;
+            }
+            if (authenOnly != null && string.IsNullOrEmpty(context.HttpContext.User.Identity.Name)){
+                context.Result = new ContentResult()
+                {
+                    StatusCode = 401,
+                    ContentType = "application/json",
+                    Content = "Bạn chưa đăng nhập !"
+                };
+                return;
+            }
+            else if (authenOnly != null && !string.IsNullOrEmpty(context.HttpContext.User.Identity.Name))
+            {
+                await next();
                 return;
             }
             else
