@@ -22,54 +22,61 @@ namespace Neac.Api.Installer
     {
         public static async void CreateConfig(this IApplicationBuilder app)
         {
-            
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            var logRepository = app.ApplicationServices.GetRequiredService<ILogRepository>();
+            try
             {
-                var context = serviceScope.ServiceProvider.GetRequiredService<NeacDbContext>();
-                if (!(context.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator).Exists())
+                using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
                 {
-                    context.Database.Migrate();
-
-                    var positionRepository = serviceScope.ServiceProvider.GetRequiredService<IPositionRepository>();
-                    var roleRepository = serviceScope.ServiceProvider.GetRequiredService<IRoleRepository>();
-
-                    var adminPosition = await positionRepository.CreateAsync(new PositonGetDropdownViewDto
+                    var context = serviceScope.ServiceProvider.GetRequiredService<NeacDbContext>();
+                    if (!(context.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator).Exists())
                     {
-                        UserPositionName = "Quản trị viên",
-                        IsAdministrator = true,
-                        CreatedDate = DateTime.Now,
-                        Status = PositionState.Active,
-                    });
-                    context.Users.Add(new User
-                    {
-                        UserId = Guid.NewGuid(),
-                        UserName = "Admin",
-                        PassWord = Md5Encrypt.MD5Hash("1Qaz2wsx"),
-                        UserPositionId = adminPosition?.ResponseData?.UserPositionId,
-                        Status = UserStatus.Working
-                    });
+                        context.Database.Migrate();
 
-                    Assembly asm = Assembly.GetExecutingAssembly();
-                    var listController = asm.GetTypes()
-                        .Where(type => typeof(ControllerBase).IsAssignableFrom(type))
-                        .Select(n => new GroupRole { GroupRoleId = Guid.Empty, GroupRoleCode = n.Name.Replace("Controller", ""), GroupRoleName = ((RoleGroupDescriptionAttribute)n.GetCustomAttribute(typeof(RoleGroupDescriptionAttribute)))?.Description });
+                        var positionRepository = serviceScope.ServiceProvider.GetRequiredService<IPositionRepository>();
+                        var roleRepository = serviceScope.ServiceProvider.GetRequiredService<IRoleRepository>();
 
-                    var controllerActionList = asm.GetTypes()
+                        var adminPosition = await positionRepository.CreateAsync(new PositonGetDropdownViewDto
+                        {
+                            UserPositionName = "Quản trị viên",
+                            IsAdministrator = true,
+                            CreatedDate = DateTime.Now,
+                            Status = PositionState.Active,
+                        });
+                        context.Users.Add(new User
+                        {
+                            UserId = Guid.NewGuid(),
+                            UserName = "Admin",
+                            PassWord = Md5Encrypt.MD5Hash("1Qaz2wsx"),
+                            UserPositionId = adminPosition?.ResponseData?.UserPositionId,
+                            Status = UserStatus.Working
+                        });
+
+                        Assembly asm = Assembly.GetExecutingAssembly();
+                        var listController = asm.GetTypes()
                             .Where(type => typeof(ControllerBase).IsAssignableFrom(type))
-                            .SelectMany(type => type.GetMethods(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public))
-                            .Where(m => !m.GetCustomAttributes(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), true).Any())
-                            .Where(m => !m.CustomAttributes.Any(n => n.AttributeType == typeof(AllowAnonymousAttribute)))
-                            .Select(x => new Role
-                            {
-                                RoleCode = x.DeclaringType.Name.Replace("Controller", "") + "-" + x.Name,
-                                RoleId = Guid.Empty,
-                                RoleName = ((RoleDescriptionAttribute)x.GetCustomAttribute(typeof(RoleDescriptionAttribute)))?.Description
-                            })
-                            .OrderBy(x => x.RoleCode).ToList();
+                            .Select(n => new GroupRole { GroupRoleId = Guid.Empty, GroupRoleCode = n.Name.Replace("Controller", ""), GroupRoleName = ((RoleGroupDescriptionAttribute)n.GetCustomAttribute(typeof(RoleGroupDescriptionAttribute)))?.Description });
 
-                    await roleRepository.UpdateListRole(controllerActionList, listController, true);
-                    await context.SaveChangesAsync();
+                        var controllerActionList = asm.GetTypes()
+                                .Where(type => typeof(ControllerBase).IsAssignableFrom(type))
+                                .SelectMany(type => type.GetMethods(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public))
+                                .Where(m => !m.GetCustomAttributes(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), true).Any())
+                                .Where(m => !m.CustomAttributes.Any(n => n.AttributeType == typeof(AllowAnonymousAttribute)))
+                                .Select(x => new Role
+                                {
+                                    RoleCode = x.DeclaringType.Name.Replace("Controller", "") + "-" + x.Name,
+                                    RoleId = Guid.Empty,
+                                    RoleName = ((RoleDescriptionAttribute)x.GetCustomAttribute(typeof(RoleDescriptionAttribute)))?.Description
+                                })
+                                .OrderBy(x => x.RoleCode).ToList();
+
+                        await roleRepository.UpdateListRole(controllerActionList, listController, true);
+                        await context.SaveChangesAsync();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                await logRepository.ErrorAsync(ex);
             }
         }
     }

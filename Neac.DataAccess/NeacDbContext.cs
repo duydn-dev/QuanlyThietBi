@@ -12,7 +12,6 @@ namespace Neac.DataAccess
 {
     public class NeacDbContext : DbContext
     {
-        public static readonly string ConnectionString = "Server=DESKTOP-6R5MOTI;Database=QuanLyThietBi;User Id=sa;Password=1Qaz2wsx;";
         public NeacDbContext(DbContextOptions<NeacDbContext> options) : base(options)
         {
         }
@@ -22,18 +21,6 @@ namespace Neac.DataAccess
         public DbSet<Department> Departments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-        }
-    }
-    public class NeacDbContextFactory : IDesignTimeDbContextFactory<NeacDbContext>
-    {
-        public NeacDbContext CreateDbContext(string[] args)
-        {
-            var envName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-
-            var optionsBuilder = new DbContextOptionsBuilder<NeacDbContext>();
-            optionsBuilder.UseSqlServer(NeacDbContext.ConnectionString);
-
-            return new NeacDbContext(optionsBuilder.Options);
         }
     }
 }

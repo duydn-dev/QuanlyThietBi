@@ -24,7 +24,7 @@ namespace Neac.Api.Installer
         {
             // add dbcontext
             services.AddHttpContextAccessor();
-            services.AddDbContext<NeacDbContext>(options => options.UseSqlServer(NeacDbContext.ConnectionString));
+            services.AddDbContext<NeacDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("NeacDbContext")));
             //add cache service
             services.AddMemoryCache();
 
