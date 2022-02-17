@@ -1,0 +1,12 @@
+﻿@charset "utf-8";
+table { border-collapse: collapse; }
+
+.japan-font { font-family: "HiraKakuPro-W3","Hiragino Kaku Gothic Pro W3","Hiragino Kaku Gothic Pro","ヒラギノ角ゴ Pro W3","メイリオ",Meiryo,"游ゴシック",YuGothic,"ＭＳ Ｐゴシック","MS PGothic","ＭＳ ゴシック","MS Gothic",sans-serif; }
+.vn-font { font-family: 'Times New Roman',sans-serif; }
+
+@media print {
+    .pagebreak { clear: both; page-break-after: always; }
+}
+
+.tableedit { border-collapse: inherit; height:auto}
+.show_part_profile .oldSize { width: 100% !important; }

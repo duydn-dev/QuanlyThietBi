@@ -1,0 +1,173 @@
+.calen-custom .fc-toolbar-chunk:nth-child(3) {
+    background: #45A0FB;
+    border-radius: 5px;
+}
+.calen-custom .fc-toolbar-chunk:nth-child(3) .fc-button{
+    background: transparent;
+    height: 30px;
+    margin: 3px 2px;
+    padding: 0 12px;
+    border-radius: 5px;
+    border: 0;
+    font-weight: 500;
+    font-size: 14px;
+    color: #fff;
+}
+.calen-custom .fc-toolbar-chunk:nth-child(3) .fc-button.fc-button-active {
+    background-color: #fff;
+    box-shadow: 0px 0.545045px 1.09009px rgba(97, 97, 97, 0.2), 0px 1.09009px 2.18018px rgba(97, 97, 97, 0.2);
+    border-radius: 5px;
+    color: #666;
+}
+.lst-unit-calen .box-head{
+    position: relative;  
+}
+.lst-unit-calen .box-head .ipt-time-area{
+    display: none;
+    margin-right: 15px;
+}
+
+.lst-unit-calen .box-head .toolbar-tit{
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 23px;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: #666666;
+}
+
+.lst-unit-calen .btn-next-prev{
+    margin-right: 8px;
+    background: #F0F0F0;
+    border: 1px solid #E5E5E5;
+    border-radius: 5px;
+}
+.lst-unit-calen .btn-next-prev>button{
+    position: relative;
+    width: 30px;
+    height: 36px;
+    background-color: #F0F0F0;
+    border-radius: 5px;
+}
+.lst-unit-calen .btn-next-prev .btn-prev{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.lst-unit-calen .btn-next-prev .btn-next{
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.lst-unit-calen .btn-next-prev>button:hover{
+    background-color: #45A0FB;
+}
+.lst-unit-calen .btn-next-prev>button:before{
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 25px;
+    height: 25px;
+    -webkit-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}
+.lst-unit-calen .btn-next-prev .btn-prev:before {
+    background: url(../images/icon-arrleft.svg) no-repeat;
+    background-size: 100% auto;
+}
+.lst-unit-calen .btn-next-prev .btn-next:before {
+    background: url(../images/icon-arrright.svg) no-repeat;
+    background-size: 100% auto;
+}
+.lst-unit-calen .btn-next-prev .btn-prev:hover:before{
+    background: url(../images/icon-arrleft-white.svg) no-repeat;
+    background-size: 100% auto;
+}
+.lst-unit-calen .btn-next-prev .btn-next:hover:before{
+    background: url(../images/icon-arrright-white.svg) no-repeat;
+    background-size: 100% auto;
+}
+
+.lst-unit-calen .toolbar-btn .btn-today{
+    height: 36px;
+    margin-right: 8px;
+    padding: 0 12px;
+    background: #45A0FB;
+    box-shadow: inset 0px 0.545045px 1.09009px rgba(97, 97, 97, 0.2), inset 0px 1.09009px 2.18018px rgba(97, 97, 97, 0.2);
+    border-radius: 5px;
+    color: #fff;
+}
+.lst-unit-calen .toolbar-btn .btn-today:disabled{
+    opacity: .65;
+}
+.lst-unit-calen .toolbar-btn .btn-sel-time{
+    background: #45A0FB;
+    border-radius: 5px;
+}
+.lst-unit-calen .toolbar-btn .btn-sel-time>button{
+    background: transparent;
+    height: 30px;
+    margin: 3px 2px;
+    padding: 0 12px;
+    border-radius: 5px;
+    border: 0;
+    font-weight: 500;
+    font-size: 14px;
+    color: #fff;
+}
+.lst-unit-calen .toolbar-btn .btn-sel-time>button.btn-active{
+    background-color: #fff;
+    -webkit-box-shadow: 0px 0.545045px 1.09009px rgba(97, 97, 97, 0.2), 0px 1.09009px 2.18018px rgba(97, 97, 97, 0.2);
+    box-shadow: 0px 0.545045px 1.09009px rgba(97, 97, 97, 0.2), 0px 1.09009px 2.18018px rgba(97, 97, 97, 0.2);
+    border-radius: 5px;
+    color: #666;
+}
+
+
+.modal.popup .modal-content .modal-header .modal-title{
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 20px;
+    color: #fff;
+}
+
+.box-head .tab-name{
+    margin-bottom: 0;
+}
+
+.tbl-calen td .badge-evt,
+.tbl-calen-list td .badge-evt{
+    margin-top: 3px;
+    padding: 2px 6px;
+    font-size: 12px !important;
+}
+
+.tbl-calen-list .info-calen .lbl-group{
+    margin: 0 12px;
+}
+.tbl.tbl-calen tbody td .lbl-status{
+    min-width: 85px;
+    margin-bottom: 0;
+    padding: 0 5px;
+    line-height: 24px;
+}
+.sidenav-has-child .nav-child .tit-child .icon-lbl{
+    margin-top: 6px;
+}
+
+.box-head .mx-datepicker {
+    width: 220px !important;
+}
+.calen-custom .fc-event .cursor-pointer{
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+.calen-custom .fc-timeGridWeek-view .fc-event .cursor-pointer b+b{
+    display: inline-block;
+}
+.content-page .calen-custom .fc-timeGridWeek-view .fc-event {
+    margin-bottom: -13px;
+}

@@ -15,5 +15,7 @@ namespace Neac.BusinessLogic.Contracts
         Task<Response<Guid>> UpdateUserRole(UpdateRoleUserDto request);
         Task<Response<GetRolesByUserDtos>> GetUserRole(Guid userId);
         Task<Response<GetRolesAndGroupDto>> DecentralizatedRole(Guid userId);
+        Task<Response<bool>> UpdateGroupUserRoleAsync(UpdateGroupRoleUserDto request);
+        Task<Response<List<GroupRoleAndRoleDto>>> GetListRoleAndGroupsAsync();
     }
 }

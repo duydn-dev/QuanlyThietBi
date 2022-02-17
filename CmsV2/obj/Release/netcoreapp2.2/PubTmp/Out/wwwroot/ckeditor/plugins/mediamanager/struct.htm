@@ -1,0 +1,270 @@
+﻿<div class="PhotoCMS_Wrapper">
+    <div class="PhotoCMS_LeftCol">
+        <div class="cns_bm_file_manager PhotoCMS_FileManagerPlugin">
+            <div class="cms_bm_fm_upload" style="display: block">
+                <!--<a href="javascript:void(0)" class="cms_bm_icon_close close"><span>&nbsp;</span></a>-->
+                <div class="cms_bm_fm_upload_content">
+                    <div class="cms_bm_fm_upload_head">
+                        Thêm ảnh
+                    </div>
+                    <div class="cms_bm_fm_upload_list">
+                        <div id="cms_bm_fm_upload_list">
+                            <ul id="box_uploadify_queue">
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="cms_bm_fm_upload_uploadify">
+                        <input type="file" id="cms_bm_fm_btn_uploadify" class="cms_bm_fm_btn_uploadify" name="file" />
+                        <!--<a href="javascript:void(0)" class="cms_bm_fm_btn_uploadify"></a>-->
+                        <!--<span class="cms_bm_fm_uploadify_total">0 file</span>-->
+                        <a href="javascript:void(0)" id="cms_bm_fm_btn_uploadify_upload" class="cms_bm_fm_btn_uploadify_upload">
+                            Upload</a> <a href="javascript:void(0)" id="cms_bm_fm_btn_uploadify_cancel" class="cms_bm_fm_btn_uploadify_cancel">
+                                Bỏ qua</a>
+                        <input type="hidden" id="cms_bm_fm_surfix" />
+                        <input type="hidden" id="cms_bm_fm_policy" />
+                        <input type="hidden" id="cms_bm_fm_signature" />
+                        <input type="hidden" id="cms_bm_fm_currentPath" />
+                    </div>
+                </div>
+                <div class="cms_bm_fm_upload_footer">
+                </div>
+            </div>
+        </div>
+        <!--#Block Edit Photo-->
+        <div class="PhotoCMS_PhotoEditWrapper PhotoCMS_PhotoFunction">
+            <!--Template Photo-Item here-->
+            <!--Photo-Info-Template.htm-->
+        </div>
+        <div class="PhotoCMS_PhotoForAlbumWrapper PhotoCMS_PhotoFunction">
+            <a href="#" class="PhotoCMS_CloseBox cms_bm_icon_close close"><span></span></a>
+            <div class="PhotoCMS_PhotoForAlbum">
+            </div>
+        </div>
+    </div>
+    <div class="PhotoCMS_MainCol">
+        <div class="PhotoCMS_TabHeaderWrapper">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#ViewAllPhoto">Tất cả</a></li>
+                <li><a href="#ViewPhoto">Ảnh đơn</a></li>
+                <li><a href="#ViewAlbum">Album</a></li>
+            </ul>
+            <div class="PhotoCMS_TabHeaderFunction">
+                <div class="PhotoCMS_Loading">
+                    &nbsp;
+                </div>
+                <div class="PhotoCMS_FooterFunction_Content PhotoCMS_PhotoNonSelectFunction PhotoCMS_MainFunction"
+                    style="display: block">
+                    <div class="PhotoCMS_CommonFilter">
+                        <select class="PhotoCMS_CommonFilter_Select">
+                            <option value="-1">Ảnh của tôi</option>
+                            <option disabled="disabled">------------------------------</option>
+                            <option value="0">Tất cả chuyên mục</option>
+                        </select>
+                    </div>
+                    <div id="PhotoCMS_AllPhotoPager" class="PhotoCMS_PagerWrapper">
+                    </div>
+                </div>
+                <div class="PhotoCMS_FooterFunction_Content PhotoCMS_PhotoAlbumFunction PhotoCMS_MainFunction">
+                    <div class="PhotoCMS_CommonFilter">
+                        <select class="PhotoCMS_CommonFilter_AlbumSelect">
+                            <option value="-1">Album của tôi</option>
+                            <option disabled="disabled">------------------------------</option>
+                            <option value="0">Tất cả chuyên mục</option>
+                        </select>
+                    </div>
+                    <div id="PhotoCMS_PhotoAlbumPager" class="PhotoCMS_PagerWrapper">
+                    </div>
+                </div>
+                <div class="PhotoCMS_FooterFunction_Content PhotoCMS_PhotoInAlbumFunction PhotoCMS_MainFunction">
+                    <div id="PhotoCMS_PhotoInAlbumPager" class="PhotoCMS_PagerWrapper">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="PhotoCMS_tab-content tab-content">
+                <div class="tab-pane active" id="ViewAllPhoto">
+                    <div class="PhotoCMS_PhotoSearchWrapper">
+                        <div class="PhotoCMS_CheckAll">
+                            <input type="checkbox" class="PhotoCMS_regular-checkbox PhotoCMS_CheckAllPhoto" id="checkbox-1-all" /><label
+                                for="checkbox-1-all"></label><span>All</span>
+                        </div>
+                        <input type="text" class="PhotoCMS_PhotoSearchTxt" placeholder="Từ khóa" />
+                        <!--<a href="#" class="PhotoCMS_PhotoSearchAdvanceShow">&nbsp;</a>-->
+                        <select class="PhotoCMS_MyFilter_Select">
+                            <option value="0">Tất cả chuyên mục</option>
+                        </select>
+                        <input type="text" placeholder="Từ ngày" class="PhotoCMS_PhotoSearchFromDate PhotoCMS_SelectDate" />
+                        <input type="text" placeholder="Đến ngày" class="PhotoCMS_PhotoSearchToDate PhotoCMS_SelectDate" />
+                        <a href="#" class="PhotoCMS_btn PhotoCMS_btn-main">Tìm kiếm</a>
+                    </div>
+                    <div class="PhotoCMS_PhotoListWrapper">
+                        <!--Template Photo-Item here-->
+                        <!--Photo-Item-Template.htm-->
+                    </div>
+                </div>
+                <div class="tab-pane" id="ViewAlbum">
+                    <div class="PhotoCMS_PhotoAlbumSearchWrapper">
+                        <input type="text" class="PhotoCMS_PhotoAlbumSearchTxt" placeholder="Từ khóa" />
+                        <select class="PhotoCMS_MyFilter_AlbumSelect">
+                            <option value="0">Tất cả chuyên mục</option>
+                        </select>
+                        <input type="text" placeholder="Từ ngày" class="PhotoCMS_PhotoAlbumSearchFromDate PhotoCMS_SelectDate" />
+                        <input type="text" placeholder="Đến ngày" class="PhotoCMS_PhotoAlbumSearchToDate PhotoCMS_SelectDate" />
+                        <a class="PhotoCMS_btn PhotoCMS_btn-main" href="#">Tìm kiếm</a>
+                    </div>
+                    <div class="PhotoCMS_PhotoInAlbumSearchWrapper">
+                        &nbsp;
+                    </div>
+                    <div class="PhotoCMS_PhotoAlbumWrapper">
+                        <!--Template PhotoAlbum-Item here-->
+                        <!--PhotoAlbum-Item-Template.htm-->
+                    </div>
+                    <div class="PhotoCMS_PhotoInAlbumWrapper">
+                        <!--Template PhotoAlbum-Item here-->
+                        <!--Photo-Item-Template.htm-->
+                    </div>
+                    <div class="PhotoCMS_PhotoAlbumInfo">
+                        <table style="margin: 130px 170px;">
+                            <tr>
+                                <td colspan="2">
+                                    <h4 class="PhotoCMS_CurrentPhotoAlbumFunction">
+                                        Tạo Album ảnh</h4>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Tên Album
+                                </td>
+                                <td>
+                                    <input type="text" id="PhotoCMS_PhotoAlbumName" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Chuyên mục
+                                </td>
+                                <td>
+                                    <select id="PhotoCMS_ZoneSelectForAlbum">
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Trạng thái
+                                </td>
+                                <td>
+                                    <select id="PhotoCMS_PhotoAlbumStatus">
+                                        <option value="1">Hiển thị</option>
+                                        <option value="0">Ẩn</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="#" class="PhotoCMS_btn PhotoCMS_btn-main PhotoCMS_CreateAlbum">{{$t("Label.Update")}}</a>
+                                </td>
+                                <td>
+                                    <a href="#" class="PhotoCMS_btn PhotoCMS_HideCreateAlbum">Bỏ qua</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="PhotoCMS_FooterFunction">
+            <div class="PhotoCMS_FooterFunction_Content">
+                <a class="PhotoCMS_btn PhotoCMS_btn-main PhotoCMS_PhotoInsertMultiPhoto">Chèn ảnh</a>
+                <a class="PhotoCMS_btn PhotoCMS_btn-main PhotoCMS_PhotoAlbumInsert" style="display: none">Chèn album</a>
+                <a class="PhotoCMS_btn PhotoCMS_btn-main PhotoCMS_PhotoAlbumInsertAllPhoto">Chèn tất cả</a>                
+                <!--<a class="PhotoCMS_btn PhotoCMS_btn-main PhotoCMS_PhotoAlbumSort">Sắp xếp ảnh</a>-->
+                <a class="PhotoCMS_btn PhotoCMS_btn-main PhotoCMS_ShowAddPhotoToAlbum">Lưu ảnh vào album</a>
+                <a class="PhotoCMS_btn PhotoCMS_btn-main PhotoCMS_PhotoAlbumEditFull">Sửa chi tiết</a>
+                <a class="PhotoCMS_btn PhotoCMS_btn-main PhotoCMS_ShowCreateAlbum">Thêm album</a>
+                <a class="PhotoCMS_btn PhotoCMS_ClosePhotoManager">Đóng (ESC)</a>
+            </div>
+        </div>
+        <div class="PhotoCMS_AddPhoto">
+            <div class="PhotoCMS_SelectAlbumHeader">
+                <b>Chọn Album để lưu ảnh</b>
+                <div class="PhotoCMS_SelectAlbumHeaderFunction">
+                    <div class="PhotoCMS_CommonFilter">
+                        <select class="PhotoCMS_CommonFilter_AlbumSelectForInsertPhoto">
+                            <option value="-1">Album của tôi</option>
+                            <option disabled="disabled">------------------------------</option>
+                            <option value="0">Tất cả chuyên mục</option>
+                        </select>
+                    </div>
+                    <div id="PhotoCMS_ListAlbumForInsertImagePager" class="PhotoCMS_PagerWrapper">
+                    </div>
+                </div>
+            </div>
+            <div class="PhotoCMS_AlbumSearchForPhotoInsertWrapper">
+                <select class="PhotoCMS_MyFilter_AlbumSelectForPhotoInsert">
+                    <option value="0">Tất cả chuyên mục</option>
+                </select>
+                <input type="text" class="PhotoCMS_PhotoAlbumSearchForPhotoInsertTxt" />
+                <a href="#" class="PhotoCMS_PhotoSearchAdvanceShow">&nbsp; </a><a href="#" class="PhotoCMS_btn PhotoCMS_btn-main PhotoCMS_PhotoAlbumSearchForPhotoInsertBtn">
+                    Tìm kiếm</a>
+            </div>
+            <div class="PhotoCMS_ListAlbumForInsertContent">
+                <div id="PhotoCMS_ListAlbumForInsertImage">
+                    <!--Template PhotoAlbum-ItemForSelect-Template.htm-->
+                </div>
+            </div>
+            <div class="PhotoCMS_PhotoAlbumInfoCreateAndSavePhoto">
+                <table style="margin: 130px 170px;">
+                    <tr>
+                        <td colspan="2">
+                            <h4 class="PhotoCMS_CurrentPhotoAlbumFunction">
+                                Tạo Album và lưu ảnh</h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Tên Album
+                        </td>
+                        <td>
+                            <input type="text" id="PhotoCMS_AlbumNameForCreateAlbumAndSave" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Chuyên mục
+                        </td>
+                        <td>
+                            <select id="PhotoCMS_ListZoneForCreateAlbumAndSave">
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Trạng thái
+                        </td>
+                        <td>
+                            <select id="PhotoCMS_ListStatusForCreateAlbumAndSave">
+                                <option value="1">Hiển thị</option>
+                                <option value="0">Ẩn</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a href="#" class="PhotoCMS_btn PhotoCMS_btn-main PhotoCMS_CreateAlbumAndSave">Tạo album
+                                và lưu ảnh</a> &nbsp; &nbsp; <a href="#" class="PhotoCMS_btn PhotoCMS_HideCreateAlbumAndSave">
+                                    Bỏ qua</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="PhotoCMS_FooterFunction">
+                <div class="PhotoCMS_FooterFunction_Content">
+                    <a class="PhotoCMS_btn PhotoCMS_btn-main PhotoCMS_CreateNewAlbumAndInserPhoto">Tạo album
+                        mới</a> <a class="PhotoCMS_btn PhotoCMS_btn-main PhotoCMS_SaveInsertPhotoToDatabase">
+                            Lưu thông tin</a> <a class="PhotoCMS_btn PhotoCMS_CancelInsertPhotoToDatabase">Hủy</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

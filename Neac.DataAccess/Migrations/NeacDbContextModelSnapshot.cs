@@ -19,6 +19,40 @@ namespace Neac.DataAccess.Migrations
                 .HasAnnotation("ProductVersion", "5.0.10")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Neac.DataAccess.Config", b =>
+                {
+                    b.Property<Guid>("ConfigId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConfigData")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConfigKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConfigName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConfigType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConfigValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsSystem")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValueSql("0");
+
+                    b.Property<int?>("Priority")
+                        .HasColumnType("int");
+
+                    b.HasKey("ConfigId");
+
+                    b.ToTable("Configs");
+                });
+
             modelBuilder.Entity("Neac.DataAccess.Department", b =>
                 {
                     b.Property<Guid>("DepartmentId")
@@ -63,6 +97,23 @@ namespace Neac.DataAccess.Migrations
                     b.HasKey("GroupRoleId");
 
                     b.ToTable("GroupRole");
+                });
+
+            modelBuilder.Entity("Neac.DataAccess.GroupRoleUserPosition", b =>
+                {
+                    b.Property<Guid>("GroupRoleUserPositionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("PositionUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("GroupRoleUserPositionId");
+
+                    b.ToTable("GroupRoleUserPositions");
                 });
 
             modelBuilder.Entity("Neac.DataAccess.Role", b =>

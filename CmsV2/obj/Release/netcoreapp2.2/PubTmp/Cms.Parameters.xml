@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="o2Tech.Fe" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^D:\\E_Data\\o2Tech\\O2System\\O2System\\CmsV2\\obj\\Release\\netcoreapp2\.2\\PubTmp\\Out\\$" />
+  </parameter>
+</parameters>

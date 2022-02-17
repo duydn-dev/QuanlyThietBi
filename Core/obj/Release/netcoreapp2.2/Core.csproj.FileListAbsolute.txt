@@ -1,0 +1,10 @@
+D:\E_Data\o2Tech\O2System\O2System\Core\bin\Release\netcoreapp2.2\Core.deps.json
+D:\E_Data\o2Tech\O2System\O2System\Core\bin\Release\netcoreapp2.2\Core.dll
+D:\E_Data\o2Tech\O2System\O2System\Core\bin\Release\netcoreapp2.2\Core.pdb
+D:\E_Data\o2Tech\O2System\O2System\Core\obj\Release\netcoreapp2.2\Core.csproj.AssemblyReference.cache
+D:\E_Data\o2Tech\O2System\O2System\Core\obj\Release\netcoreapp2.2\Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\E_Data\o2Tech\O2System\O2System\Core\obj\Release\netcoreapp2.2\Core.AssemblyInfoInputs.cache
+D:\E_Data\o2Tech\O2System\O2System\Core\obj\Release\netcoreapp2.2\Core.AssemblyInfo.cs
+D:\E_Data\o2Tech\O2System\O2System\Core\obj\Release\netcoreapp2.2\Core.csproj.CoreCompileInputs.cache
+D:\E_Data\o2Tech\O2System\O2System\Core\obj\Release\netcoreapp2.2\Core.dll
+D:\E_Data\o2Tech\O2System\O2System\Core\obj\Release\netcoreapp2.2\Core.pdb

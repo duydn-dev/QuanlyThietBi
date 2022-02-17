@@ -1,0 +1,9 @@
+﻿@using Cms
+@using Core
+@using Core.Settings
+@using Microsoft.AspNetCore.Http
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper "*, Microsoft.AspNetCore.SpaServices"
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor

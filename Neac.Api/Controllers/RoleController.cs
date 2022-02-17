@@ -17,13 +17,21 @@ namespace Neac.Api.Controllers
     [UserAuthorize]
     [Route("api/[controller]")]
     [ApiController]
-    [RoleGroupDescription("Quản lý người dùng")]
+    [RoleGroupDescription("Quản lý quyền")]
     public class RoleController : ControllerBase
     {
         private readonly IRoleRepository _roleRepository;
         public RoleController(IRoleRepository roleRepository)
         {
             _roleRepository = roleRepository;
+        }
+
+        [Authorize]
+        [Route("")]
+        [HttpGet]
+        public async Task<Response<List<GroupRoleAndRoleDto>>> GetListRoleAndGroupsAsync()
+        {
+            return await _roleRepository.GetListRoleAndGroupsAsync();
         }
 
         [RoleDescription("Cập nhật danh sách quyền")]
@@ -74,6 +82,14 @@ namespace Neac.Api.Controllers
         public async Task<Response<GetRolesAndGroupDto>> DecentralizatedRole(Guid userId)
         {
             return await _roleRepository.DecentralizatedRole(userId);
+        }
+
+        [RoleDescription("Cập nhật quyền cho vai trò")]
+        [Route("decentralizated-group-role")]
+        [HttpPost]
+        public async Task<Response<bool>> UpdateGroupUserRoleAsync([FromBody] UpdateGroupRoleUserDto request)
+        {
+            return await _roleRepository.UpdateGroupUserRoleAsync(request);
         }
     }
 }

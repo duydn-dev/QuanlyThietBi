@@ -5,6 +5,7 @@ using Neac.BusinessLogic.UnitOfWork;
 using Neac.Common;
 using Neac.Common.Dtos;
 using Neac.Common.Dtos.PositionDtos;
+using Neac.Common.Dtos.UserPositionDtos;
 using Neac.DataAccess;
 using Newtonsoft.Json;
 using System;
@@ -20,11 +21,13 @@ namespace Neac.BusinessLogic.Repository
         private readonly IMapper _mapper;
         private readonly ILogRepository _logRepository;
         private readonly IUnitOfWork _unitOfWork;
-        public PositionRepository(ILogRepository logRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IUserRepository _userRepository;
+        public PositionRepository(ILogRepository logRepository, IUnitOfWork unitOfWork, IMapper mapper, IUserRepository userRepository)
         {
             _logRepository = logRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _userRepository = userRepository;
         }
 
         public async Task<Response<PositonGetDropdownViewDto>> CreateAsync(PositonGetDropdownViewDto request)
@@ -69,29 +72,105 @@ namespace Neac.BusinessLogic.Repository
             }
         }
 
-        public async Task<Response<GetListResponseModel<List<UserPosition>>>> GetUserPositionsAsync(string filter)
+        public async Task<Response<GetListResponseModel<List<UserPositionDto>>>> GetUserPositionsAsync(PositionGetFilterDto filter)
         {
             try
             {
-                var request = JsonConvert.DeserializeObject<PositionGetFilterDto>(filter);
                 var query = _unitOfWork.GetRepository<UserPosition>()
                                 .GetAll()
-                                .WhereIf(!string.IsNullOrEmpty(request.TextSearch), n => n.UserPositionName.Contains(request.TextSearch));
+                                .WhereIf(!string.IsNullOrEmpty(filter.TextSearch), n => n.UserPositionName.Contains(filter.TextSearch));
 
-                GetListResponseModel<List<UserPosition>> responseData = new GetListResponseModel<List<UserPosition>>(query.Count(), request.PageSize);
+                GetListResponseModel<List<UserPositionDto>> responseData = new GetListResponseModel<List<UserPositionDto>>(query.Count(), filter.PageSize);
                 var result = await query
                     .OrderByDescending(n => n.CreatedDate)
-                    .Skip(request.PageSize * (request.PageIndex - 1)).Take(request.PageSize)
+                    .Skip(filter.PageSize * (filter.PageIndex - 1)).Take(filter.PageSize)
                     .ToListAsync();
-                return Response<GetListResponseModel<List<UserPosition>>>.CreateSuccessResponse(responseData);
+                responseData.Data = _mapper.Map<List<UserPosition>, List<UserPositionDto>>(result);
+                return Response<GetListResponseModel<List<UserPositionDto>>>.CreateSuccessResponse(responseData);
             }
             catch(Exception ex)
             {
                 await _logRepository.ErrorAsync(ex);
-                return Response<GetListResponseModel<List<UserPosition>>>.CreateErrorResponse(ex);
+                return Response<GetListResponseModel<List<UserPositionDto>>>.CreateErrorResponse(ex);
             }
         }
 
+        public async Task<Response<UserPositionDto>> CreateUserPositionsAsync(UserPositionDto request)
+        {
+            try
+            {
+                var currentUser = await _userRepository.GetIdentityUser();
+                request.UserPositionId = Guid.NewGuid();
+                request.CreatedBy = currentUser?.UserId;
+                request.CreatedDate = DateTime.Now;
+                var mapped = _mapper.Map<UserPositionDto, UserPosition>(request);
+                await _unitOfWork.GetRepository<UserPosition>().Add(mapped);
+                await _unitOfWork.SaveAsync();
+                return Response<UserPositionDto>.CreateSuccessResponse(request);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.ErrorAsync(ex);
+                return Response<UserPositionDto>.CreateErrorResponse(ex);
+            }
+        }
+        public async Task<Response<UserPositionDto>> GetUserPositionsByIdAsync(Guid userPositionId)
+        {
+            try
+            {
+                var userPosition = await _unitOfWork
+                    .GetRepository<UserPosition>()
+                    .GetByExpression(n => n.UserPositionId == userPositionId)
+                    .FirstOrDefaultAsync();
+
+                var mapped = _mapper.Map<UserPosition, UserPositionDto>(userPosition);
+                return Response<UserPositionDto>.CreateSuccessResponse(mapped);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.ErrorAsync(ex);
+                return Response<UserPositionDto>.CreateErrorResponse(ex);
+            }
+        }
+        public async Task<Response<UserPositionDto>> DeleteUserPositionsAsync(Guid userPositionId)
+        {
+            try
+            {
+                var userPosition = await _unitOfWork
+                    .GetRepository<UserPosition>()
+                    .GetByExpression(n => n.UserPositionId == userPositionId)
+                    .FirstOrDefaultAsync();
+
+                await _unitOfWork.GetRepository<UserPosition>().Delete(userPosition);
+                await _unitOfWork.SaveAsync();
+                var mapped = _mapper.Map<UserPosition, UserPositionDto>(userPosition);
+                return Response<UserPositionDto>.CreateSuccessResponse(mapped);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.ErrorAsync(ex);
+                return Response<UserPositionDto>.CreateErrorResponse(ex);
+            }
+        }
+
+        public async Task<Response<UserPositionDto>> EditUserPositionsAsync(UserPositionDto request)
+        {
+            try
+            {
+                var currentUser = await _userRepository.GetIdentityUser();
+                request.ModifiedBy = currentUser?.UserId;
+                request.ModifiedDate = DateTime.Now;
+                var mapped = _mapper.Map<UserPositionDto, UserPosition>(request);
+                await _unitOfWork.GetRepository<UserPosition>().Update(mapped);
+                await _unitOfWork.SaveAsync();
+                return Response<UserPositionDto>.CreateSuccessResponse(request);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.ErrorAsync(ex);
+                return Response<UserPositionDto>.CreateErrorResponse(ex);
+            }
+        }
         public async Task<Response<List<PositonGetDropdownViewDto>>> GetUserPositionsDropdownAsync()
         {
             try

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Neac.BusinessLogic.Contracts;
 using Neac.BusinessLogic.UnitOfWork;
@@ -19,12 +20,14 @@ namespace Neac.BusinessLogic.Repository
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserRepository _userRepository;
         private readonly IMemoryCache _memoryCache;
-        public RoleRepository(IUnitOfWork unitOfWork, IUserRepository userRepository, IMemoryCache memoryCache, ILogRepository logRepository)
+        private readonly IMapper _mapper;
+        public RoleRepository(IUnitOfWork unitOfWork, IUserRepository userRepository, IMemoryCache memoryCache, ILogRepository logRepository, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _userRepository = userRepository;
             _memoryCache = memoryCache;
             _logRepository = logRepository;
+            _mapper = mapper;
         }
 
         public async Task<Response<GetRolesAndGroupDto>> DecentralizatedRole(Guid userId)
@@ -172,7 +175,50 @@ namespace Neac.BusinessLogic.Repository
                 return Response<Guid>.CreateErrorResponse(ex);
             }
         }
+        public async Task<Response<bool>> UpdateGroupUserRoleAsync(UpdateGroupRoleUserDto request)
+        {
+            try
+            {
+                var userPositions = _unitOfWork.GetRepository<GroupRoleUserPosition>().GetByExpression(n => n.PositionUserId == request.UserPositionId);
+                await _unitOfWork.GetRepository<GroupRoleUserPosition>().DeleteRangeAsync(userPositions);
 
+                if(request.RoleIds.Count > 0)
+                {
+                    request.RoleIds.ForEach(async (item) =>
+                    {
+                        await _unitOfWork.GetRepository<GroupRoleUserPosition>().Add(new GroupRoleUserPosition
+                        {
+                            GroupRoleUserPositionId = Guid.NewGuid(),
+                            PositionUserId = request.UserPositionId,
+                            RoleId = item
+                        });
+                    });
+                }
+                await _unitOfWork.SaveAsync();
+                return Response<bool>.CreateSuccessResponse(true);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.ErrorAsync(ex);
+                return Response<bool>.CreateErrorResponse(ex);
+            }
+        }
+        public async Task<Response<List<GroupRoleAndRoleDto>>> GetListRoleAndGroupsAsync()
+        {
+            try
+            {
+                var query = await _unitOfWork.GetRepository<GroupRole>().GetAll().Include(n => n.Roles).ToListAsync();
+                var mapped = _mapper.Map<List<GroupRole>, List<GroupRoleAndRoleDto>>(query);
+                return Response<List<GroupRoleAndRoleDto>>.CreateSuccessResponse(mapped);
+            }
+            catch (Exception ex)
+            {
+                await _logRepository.ErrorAsync(ex);
+                return Response<List< GroupRoleAndRoleDto >>.CreateErrorResponse(ex);
+            }
+        }
+
+        #region private
         private async Task AddOrCreateGroupRoleAsync(IEnumerable<GroupRole> groupRoles, IQueryable<GroupRole> listGroupRole)
         {
             foreach (var item in groupRoles)
@@ -198,5 +244,6 @@ namespace Neac.BusinessLogic.Repository
             var roleGroup = await listGroupRole.FirstOrDefaultAsync(n => n.GroupRoleCode == roleGroupName);
             return roleGroup.GroupRoleId;
         }
+        #endregion
     }
 }
