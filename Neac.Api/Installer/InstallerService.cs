@@ -57,11 +57,13 @@ namespace Neac.Api.Installer
             services.AddSingleton<ILogRepository, LogRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+            services.AddTransient(typeof(IStoreProcedureRepository<>), typeof(StoreProcedureRepository<>));
+            // add user-defined service
+
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IRoleRepository, RoleRepository>();
             services.AddTransient<IPositionRepository, PositionRepository>();
             services.AddTransient<IDepartmentRepository, DepartmentRepository>();
-            // add user-defined service
         }
     }
 }
