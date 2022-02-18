@@ -49,7 +49,7 @@ namespace Neac.BusinessLogic.Repository
         }
 
         #region CRUD
-        public async Task<Response<GetListResponseModel<List<UserCreateDto>>>> GetListUser(GetListUserRequestDto request)
+        public async Task<Response<GetListResponseModel<List<ListUserResponseDto>>>> GetListUser(GetListUserRequestDto request)
         {
             try
             {
@@ -63,19 +63,39 @@ namespace Neac.BusinessLogic.Repository
                     );
                 query = query.WhereIf(request.Status.HasValue, n => n.Status == request.Status);
 
-                GetListResponseModel<List<UserCreateDto>> responseData = new GetListResponseModel<List<UserCreateDto>>(query.Count(), request.PageSize);
-                var result = await query
+                var result = (from q in query
+                              join p in _unitOfWork.GetRepository<UserPosition>().GetAll() on q.UserPositionId equals p.UserPositionId
+                              select new ListUserResponseDto
+                              {
+                                  UserId = q.UserId,
+                                  UserName = q.UserName,
+                                  FullName = q.FullName,
+                                  Email = q.Email,
+                                  NumberPhone = q.NumberPhone,
+                                  Avatar = q.Avatar,
+                                  Address = q.Address,
+                                  CreatedBy = q.CreatedBy,
+                                  CreatedDate = q.CreatedDate,
+                                  ModifiedBy = q.ModifiedBy,
+                                  ModifiedDate = q.ModifiedDate,
+                                  Status = q.Status,
+                                  UserPositionId = p.UserPositionId,
+                                  UserPositionName = p.UserPositionName,
+                                  IsAdministrator = p.IsAdministrator,
+                              });
+
+                GetListResponseModel<List<ListUserResponseDto>> responseData = new GetListResponseModel<List<ListUserResponseDto>>(result.Count(), request.PageSize);
+                var data = await result
                     .OrderByDescending(n => n.CreatedDate)
                     .Skip(request.PageSize * (request.PageIndex - 1)).Take(request.PageSize)
                     .ToListAsync();
-
-                responseData.Data = _mapper.Map<List<User>, List<UserCreateDto>>(result);
-                return Response<GetListResponseModel<List<UserCreateDto>>>.CreateSuccessResponse(responseData);
+                responseData.Data = data;
+                return Response<GetListResponseModel<List<ListUserResponseDto>>>.CreateSuccessResponse(responseData);
             }
             catch (Exception ex)
             {
                 await _logRepository.ErrorAsync(ex);
-                return Response<GetListResponseModel<List<UserCreateDto>>>.CreateErrorResponse(ex);
+                return Response<GetListResponseModel<List<ListUserResponseDto>>>.CreateErrorResponse(ex);
             }
         }
         public async Task<Response<User>> GetUserByUserId(Guid userId)
@@ -83,6 +103,7 @@ namespace Neac.BusinessLogic.Repository
             try
             {
                 var user = await _unitOfWork.GetRepository<User>().GetByExpression(n => n.UserId == userId).FirstOrDefaultAsync();
+                user.PassWord = "";
                 return Response<User>.CreateSuccessResponse(user);
             }
             catch (Exception ex)
@@ -176,7 +197,7 @@ namespace Neac.BusinessLogic.Repository
         {
             try
             {
-                var responseUser = await _unitOfWork.GetRepository<User>().GetByExpression(n => n.UserName == request.UserName).FirstOrDefaultAsync();
+                var responseUser = await _unitOfWork.GetRepository<User>().GetByExpression(n => n.UserName == request.UserName).Include(n => n.UserPosition).FirstOrDefaultAsync();
                 if (responseUser == null)
                 {
                     await _logRepository.ErrorAsync("không tìm thấy tài khoản này !");
@@ -202,7 +223,9 @@ namespace Neac.BusinessLogic.Repository
                     NumberPhone = responseUser.NumberPhone,
                     UserId = responseUser.UserId,
                     Token = token.token,
-                    Expire = token.expire
+                    Expire = token.expire,
+                    Avatar = responseUser.Avatar,
+                    IsAdministrator = responseUser.UserPosition?.IsAdministrator
                 });
             }
             catch (Exception ex)

@@ -19,7 +19,7 @@
             <li class="sidenav-tit">Hệ thống</li>
             <!-- Thêm class "is-active" vào class "sidenav-itm" khi nội dung đó được chọn -->
             <li class="sidenav-itm">
-                <router-link to="/meet-room" class="d-flex align-items-center meet-link">
+                <router-link to="/users" class="d-flex align-items-center meet-link">
                     <i class="bi bi-ui-checks-grid"></i>
                     <strong class="itm-title">Người dùng</strong>
                 </router-link>

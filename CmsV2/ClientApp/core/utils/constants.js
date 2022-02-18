@@ -1,9 +1,9 @@
 ﻿let mode = 'development';
 let suffix = '';
-if (!process.env.VUE_ENV && window && window.appSettings) {
-    mode = window.appSettings.mode;
-    suffix = '_' + mode;
-}
+// if (!process.env.VUE_ENV && window && window.appSettings) {
+//     mode = window.appSettings.mode;
+//     suffix = '_' + mode;
+// }
 const CONSTANTS = {
     AUTH_TOKEN: 'AUTH_TOKEN' + suffix,
     LANG: 'LANG' + suffix,

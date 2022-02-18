@@ -4,7 +4,6 @@
             <div class="kt-header-mobile__logo">
                 <a href="javascript:;" style="color:#d1021c; font-weight:bold; font-size:18px">
                     <!--<img alt="Logo" src="/metronic/themes/metronic/theme/default/demo1/dist/assets/media/logos/logo-light.png">-->
-                    {{appSettings.currentCompany.name}}
                 </a>
             </div>
             <div class="kt-header-mobile__toolbar">
@@ -42,7 +41,7 @@
                     <div
                         class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-subheader--fixed"
                     >
-                        <router-view :key="$route.path + appSettings.CompanyId" />
+                        <router-view />
                     </div>
 
                     <!-- begin:: Footer -->

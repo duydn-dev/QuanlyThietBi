@@ -48,10 +48,9 @@ namespace Neac.Api.Controllers
         [RoleDescription("Xem danh sách tài khoản")]
         [Route("")]
         [HttpGet]
-        public async Task<Response<GetListResponseModel<List<UserCreateDto>>>> GetFilter(string request)
+        public async Task<Response<GetListResponseModel<List<ListUserResponseDto>>>> GetFilter([FromQuery] GetListUserRequestDto request)
         {
-            var req = JsonConvert.DeserializeObject<GetListUserRequestDto>(request);
-            return await _userRepository.GetListUser(req);
+            return await _userRepository.GetListUser(request);
         }
 
         [RoleDescription("Xem tài khoản bằng Id")]

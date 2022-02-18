@@ -1,10 +1,77 @@
-<template>    
-<div v-if="currentUser" id="app-full">
-    
-    
-    <router-view :key="$route.path + appSettings.CompanyId" />
+<template>
+    <div v-if="currentUser" id="app-full">
+        <div>
+            <header>
+                <div class="header-ct d-flex justify-content-end align-items-center">
+                    <button
+                        type="button"
+                        class="btn-menubar js-btn-menubar"
+                        @click="toggleSidebar"
+                    ></button>
+                    <div class="topbar-menu d-flex">
+                        <slot name="header-search"></slot>
+                        <ul class="lst-topbar-menu d-flex align-items-center">
+                            <li class="itm-topbar noti-remind"></li>
+                            <li class="itm-topbar user-profile">
+                                <div class="js-btn-showPopHeader">
+                                    <a
+                                        class="itm-link js-btn-drop d-flex align-items-center"
+                                        href="javascript:void(0)"
+                                        @click="toggleMenu(1)"
+                                    >
+                                        <avatar
+                                            :src="currentUser.avatar"
+                                            :username="currentUser.fullName"
+                                            css-class="acc-uavatar"
+                                            :size="35"
+                                        />
+                                        <span class="acc-uname">{{ currentUser.fullName }}</span>
+                                    </a>
+                                    <div class="drop-menu type2" :class="{ show: menuIndex == 1 }">
+                                        <a
+                                            href="javascript:void(0);"
+                                            class="drop-itm"
+                                            @click="triggerClick('openChangePassPopup')"
+                                            >Đổi mật khẩu</a
+                                        >
+                                        <a
+                                            href="javascript:void(0);"
+                                            class="drop-itm"
+                                            @click="signOut"
+                                            >Đăng xuất</a
+                                        >
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+            <menu-left />
+            <div
+                class="sidebar-overlay"
+                v-if="sidebarModeOpen"
+                @click="setSidebarMode(false)"
+            ></div>
+            <main>
+                <div class="wrap wiki-wrap wiki-user-wrap theme-blue">
+                    <div class="content-page d-flex">
+                        <div class="main-ct">
+                            <div class="box box-manage-room">
+                                <router-view />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <div>
+                <footer>
+                    <p class="copyright">Năm 2021 © O2Tech</p>
+                </footer>
+            </div>
+        </div>
 
-    <modalv2
+        <modalv2
             v-if="openChangePassPopup"
             :width="325"
             :footer="false"
@@ -43,7 +110,8 @@
                     <span
                         class="btn btn-primary w-md waves-effect waves-light"
                         @click="submitChangePassword"
-                    >Xác nhận</span>
+                        >Xác nhận</span
+                    >
                 </div>
             </div>
         </modalv2>
@@ -58,7 +126,11 @@
             <div slot="body">
                 <ul class="kt-nav kt-margin-t-10 kt-margin-b-10">
                     <li v-for="com in appSettings.companies" :key="com.id" class="kt-nav__item">
-                        <a href="javascipt:void(0)" class="kt-nav__link" @click="changeCompany(com.id)">
+                        <a
+                            href="javascipt:void(0)"
+                            class="kt-nav__link"
+                            @click="changeCompany(com.id)"
+                        >
                             <span class="kt-nav__link-icon">
                                 <avatar
                                     :src="com.logo"
@@ -98,7 +170,10 @@
             </div>
         </modalv2>
         <!--<guide v-if="openTutorialPopup" @closePopup="triggerClick('openTutorialPopup')"></guide>-->
-        <send-error v-if="openSendErrorPopup" @closePopup="triggerClick('openSendErrorPopup')"></send-error>
+        <send-error
+            v-if="openSendErrorPopup"
+            @closePopup="triggerClick('openSendErrorPopup')"
+        ></send-error>
         <notifications group="foo" />
 
         <!--<progressBar />-->
@@ -106,25 +181,37 @@
         <iframe
             id="error_Report"
             :src="`${techCoServiceUrl}/embed/error-report?memberId=${currentUser.id}&memberName=${currentUser.userName} - ${currentUser.fullName}&system=${CONSTANTS.SYSTEM_NAME}`"
-            style="width: 100%; height: 100%; position: fixed; top: 0; left: 0; display: none;z-index: 2000;"
-        ></iframe> 
-</div>
+            style="
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                left: 0;
+                display: none;
+                z-index: 2000;
+            "
+        ></iframe>
+    </div>
 </template>
 
 <style scoped>
-    @import '/assets-v2/css/bootstrap.min.css';
-    @import '/assets-v2/css/bootstrap-icons.css';
-    @import '/assets-v2/css/style-common.css';   
-    @import '/assets-v2/css/common-custom.css';  
+@import '/assets-v2/css/bootstrap.min.css';
+@import '/assets-v2/css/bootstrap-icons.css';
+@import '/assets-v2/css/style-common.css';
+@import '/assets-v2/css/common-custom.css';
+footer {
+    position: absolute;
+    bottom: 0;
+}
 </style>
 
 <script>
-import { mapGetters, mapActions,mapMutations } from 'vuex';
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 import CONSTANTS from '../core/utils/constants';
 
 //import headerTop from './_shared/v2/header-top';
-// import menuLeft from './calendar/v2/menu-left';
-// import siteFooter from './_shared/site-footer';
+import menuLeft from './_shared/menu-left-v2.vue';
+// import siteFooter from './_shared/site-footer.vue';
 // import stickyToolbar from './_shared/sticky-toolbar';
 
 let menuMode = '';
@@ -138,7 +225,7 @@ if (typeof localStorage !== 'undefined') {
 export default {
     name: 'AppV2',
     components: {
-        // menuLeft,
+        menuLeft,
         // siteFooter,
         // stickyToolbar,
         // quickPanel,
@@ -153,7 +240,7 @@ export default {
             form: {
                 oldPassword: '',
                 newPassword: '',
-                newPassword2: ''
+                newPassword2: '',
             },
             isInFullScreen: false,
             showModal: false,
@@ -165,7 +252,9 @@ export default {
             sessionTimeOut: 20 * 60,
             logOutDelay: 30,
             delayTimeOut: null,
-            timeOut: null
+            timeOut: null,
+            versions: [],
+            menuIndex: -1,
         };
     },
     computed: {
@@ -176,8 +265,8 @@ export default {
             'openTutorialPopup',
             'openSendErrorPopup',
             'blocks',
-            'menuData'
-        ])
+            'menuData',
+        ]),
     },
     methods: {
         ...mapActions(['logOut', 'initSystem', 'updateAppSettings']),
@@ -214,6 +303,11 @@ export default {
         //     }
         //     this.showLeftMenuMobile = !this.showLeftMenuMobile;
         // },
+        toggleMenu(index) {
+            if (index == this.menuIndex) index = -1;
+            this.menuIndex = index;
+            // this.$refs.notilst.showListPanel(false);
+        },
         signOut() {
             this.logOut().then(() => {
                 clearInterval(this.timeOut);
@@ -227,8 +321,8 @@ export default {
                 data: {
                     m: 'session',
                     fn: 'reset-session',
-                    isBasic: true
-                }
+                    isBasic: true,
+                },
             }).then(() => {
                 this.sessionTimeOut = this.constSessionTimeOut;
                 this.initSession();
@@ -243,15 +337,15 @@ export default {
                 data: {
                     m: 'user',
                     fn: 'change_pass',
-                    ...this.form
-                }
+                    ...this.form,
+                },
             })
-                .then(response => {
+                .then((response) => {
                     if (response.success) {
                         this.form = {
                             oldPassword: '',
                             newPassword: '',
-                            newPassword2: ''
+                            newPassword2: '',
                         };
                         this.triggerClick('openChangePassPopup');
                         return this.$message('Đổi mật khẩu thành công!');
@@ -345,10 +439,10 @@ export default {
                         data: {
                             m: 'session',
                             fn: 'check-time-out',
-                            isBasic: true
-                        }
+                            isBasic: true,
+                        },
                     })
-                        .then(response => {
+                        .then((response) => {
                             if (response.data <= 0) {
                                 this.openTimeOutPopup = true;
                                 this.delayTimeOut = setInterval(() => {
@@ -359,10 +453,10 @@ export default {
                                             data: {
                                                 m: 'session',
                                                 fn: 'check-time-out',
-                                                isBasic: true
-                                            }
+                                                isBasic: true,
+                                            },
                                         })
-                                            .then(response => {
+                                            .then((response) => {
                                                 if (response.data <= 0) {
                                                     this.signOut();
                                                 } else {
@@ -411,34 +505,38 @@ export default {
                     if (url && url.split('/').length > 1) url2 = url.split('/')[1];
                 }
                 var index = listMenuAllow
-                    .map(element => {
+                    .map((element) => {
                         return {
                             ...element,
-                            childs: element.childs.filter(subElement => subElement.link === fullUrl)
+                            childs: element.childs.filter(
+                                (subElement) => subElement.link === fullUrl
+                            ),
                         };
                     })
-                    .findIndex(k => k.childs.length > 0);
+                    .findIndex((k) => k.childs.length > 0);
 
                 if (index === -1)
                     index = listMenuAllow
-                        .map(element => {
+                        .map((element) => {
                             return {
                                 ...element,
                                 childs: element.childs.filter(
-                                    subElement =>
+                                    (subElement) =>
                                         url &&
                                         url !== '/' &&
                                         (subElement.link === url ||
                                             (subElement.link && subElement.link.includes(url2)))
-                                )
+                                ),
                             };
                         })
-                        .findIndex(k => k.childs.length > 0);
+                        .findIndex((k) => k.childs.length > 0);
 
                 if (index === -1) index = 1;
-                this.setMenuList(listMenuAllow.filter(k => k.block === listMenuAllow[index].block));
+                this.setMenuList(
+                    listMenuAllow.filter((k) => k.block === listMenuAllow[index].block)
+                );
             }
-        }
+        },
     },
     watch: {
         menuMode() {
@@ -461,6 +559,6 @@ export default {
     created() {
         // this.initMenuData();
         //this.initSession();
-    }
+    },
 };
 </script>

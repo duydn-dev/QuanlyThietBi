@@ -16,7 +16,7 @@ namespace Neac.BusinessLogic.Contracts
         Task<Response<User>> GetUserByUserName(string userName);
         Task<Response<User>> GetUserByUserId(Guid userId);
         Task<Response<UserProfileViewDto>> GetUserProfileAsync(Guid userId);
-        Task<Response<GetListResponseModel<List<UserCreateDto>>>> GetListUser(GetListUserRequestDto request);
+        Task<Response<GetListResponseModel<List<ListUserResponseDto>>>> GetListUser(GetListUserRequestDto request);
         Task<Response<UserCreateDto>> Create(UserCreateDto request);
         Task<Response<UserCreateDto>> Update(UserCreateDto request);
         Task<Response<bool>> Delete(Guid userId);

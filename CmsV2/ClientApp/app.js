@@ -263,7 +263,6 @@ Vue.filter('trimFloat', function (value) {
     if (!value) return 0;
     return Math.round(value * 100) / 100;
 });
-
 sync(store, router);
 
 const app = new Vue({

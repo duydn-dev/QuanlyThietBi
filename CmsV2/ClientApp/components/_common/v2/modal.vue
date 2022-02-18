@@ -17,7 +17,7 @@
                     <div class="modal-header" v-if="isShowHeader">
                         <h5
                             id="myModalLabel"
-                            class="modal-title mt-0"
+                            class="modal-title mt-0 text-white"
                             v-html="title"
                             v-if="header"
                         />

@@ -1,5 +1,6 @@
 ﻿import axios from '../../core/plugins/http';
 import CONSTANTS from '../../core/utils/constants';
+import axiosService from '../../core/utils/axiosService';
 
 const apiUrl = window.appSettings.ApiUrl;
 export const SetTokenLocalstorage = ({ commit }, user) => {
@@ -76,22 +77,38 @@ export const resetPassUser = ({ commit }, data) => {
 };
 export const getListUsers = ({ commit }, payload) => {
     return new Promise((resolve, reject) => {
-        return axios({
-            data: {
-                m: 'user',
-                fn: 'get_list',
-                ...payload
-            }
+        return axiosService.get(`api/User?request=${payload}`)
+        .then(response => {
+            commit('GETLIST', response.data.responseData.data);
+            return resolve(response.data.responseData)
         })
-            .then(res => {
-                commit('GETLIST', res.data);
-                return resolve(res.data);
-            })
-            .catch(err => {
-                commit('ERROR', err);
-                return reject(err);
-            });
-    });
+        .catch(err => {
+            commit('ERROR', err);
+            return reject(err);
+        });
+    })
+    
+    // return axios({
+    //     url: `${apiUrl}/api/User?request=${JSON.stringify(payload)}`,
+    //     method: 'get'
+    // }).then(res => {
+    //     commit('GETLIST', res.responseData);
+    //     return resolve(res.responseData);
+    // })
+    // .catch(err => {
+    //     commit('ERROR', err);
+    //     return reject(err);
+    // });
+    // const r = axios({
+    //     url: `${apiUrl}/api/User?request={}`,
+    //     method: 'get',
+    //     headers: {
+    //         'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiI4NjdlZjY5Mi0zZDdjLTQzMTAtOGRkMS1mNDM4MjliOGM5NzciLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJqdGkiOiI3OTFjY2E4Yy02ZjAyLTQwMzctODBkMi1hZmZjMDQ1YTlmNjgiLCJleHAiOjE2NDUxODQ4MTMsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMSIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NDIwMCJ9.DnBpmy68ZnxGywiFUcxJAtGFNHcOYb6bgYZNk2Lg-bA`
+    //     }
+    // });
+    // r.then(response => {
+    //     console.log(response);
+    // })
 };
 export const getListUserByShare = ({ commit }, payload) => {
     return new Promise((resolve, reject) => {

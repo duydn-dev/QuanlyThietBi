@@ -15,9 +15,15 @@ let _routers = [
         path:'/',
         component: AppV2,
         children:[
+            // calendar
             {
                 path: '/',
                 component: _import('dashboard/index'),
+                meta: { requiresAuth: true }
+            },
+            {
+                path: '/users',
+                component: _import('user/index'),
                 meta: { requiresAuth: true }
             },
         ]

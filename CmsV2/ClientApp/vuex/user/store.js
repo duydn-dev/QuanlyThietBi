@@ -19,7 +19,11 @@ const store = {
         listUserByShare: null,
         fullNameById: null,
         totalUserByShare: 0,
-        listUserSelected: []
+        listUserSelected: [],
+        userStatus: [
+            {id: 0, name: "Không hoạt động"},
+            {id: 1, name: "Hoạt động"},
+        ]
     },
 
     mutations: {
@@ -73,6 +77,7 @@ const store = {
         totalUserByShare: state => state.totalUserByShare,
         fullNameById: state => state.fullNameById,
         listUserSelected: state => state.listUserSelected,
+        userStatus: state => state.userStatus,
     }
 };
 
