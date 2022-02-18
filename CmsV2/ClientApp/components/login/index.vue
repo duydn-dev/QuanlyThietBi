@@ -2,11 +2,18 @@
     <div class="kt-grid kt-grid--ver kt-grid--root kt-page">
         <div id="kt_login" class="kt-grid kt-grid--hor kt-grid--root kt-login kt-login--v1">
             <div
-                class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--desktop kt-grid--ver-desktop kt-grid--hor-tablet-and-mobile"
+                class="
+                    kt-grid__item kt-grid__item--fluid
+                    kt-grid kt-grid--desktop kt-grid--ver-desktop kt-grid--hor-tablet-and-mobile
+                "
             >
                 <!--begin::Aside-->
                 <div
-                    class="kt-grid__item kt-grid__item--order-tablet-and-mobile-2 kt-grid kt-grid--hor kt-login__aside"
+                    class="
+                        kt-grid__item kt-grid__item--order-tablet-and-mobile-2
+                        kt-grid kt-grid--hor
+                        kt-login__aside
+                    "
                     style="background: #146cd8"
                 >
                     <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver">
@@ -45,7 +52,10 @@
                 <!--begin::Aside-->
                 <!--begin::Content-->
                 <div
-                    class="kt-grid__item kt-grid__item--fluid kt-grid__item--order-tablet-and-mobile-1 kt-login__wrapper"
+                    class="
+                        kt-grid__item kt-grid__item--fluid kt-grid__item--order-tablet-and-mobile-1
+                        kt-login__wrapper
+                    "
                 >
                     <!--begin::Body-->
                     <div class="kt-login__body">
@@ -81,39 +91,6 @@
                                         required
                                         @keyup.enter="doLogin"
                                     />
-                                </div>
-                                <div class="form-group">
-                                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                                        <i
-                                            class="flaticon-lock txt-ico"
-                                            style="
-                                                top: 34px;
-                                                color: #646c9a;
-                                                z-index: 10;
-                                                font-size: 14px;
-                                            "
-                                        />
-                                        <input
-                                            v-model="loginData.captcha"
-                                            type="text"
-                                            class="form-control txt"
-                                            placeholder="Mã xác nhận"
-                                            style="text-transform: uppercase"
-                                            required
-                                            @keyup.enter="doLogin"
-                                        />
-                                        <img id="img-captcha" :src="imgCaptcha" width="200" />
-                                        <span
-                                            id="reloadCaptcha"
-                                            title="Đổi mã mới"
-                                            @click="getCaptcha()"
-                                        >
-                                            <strong
-                                                style="font-size: 22px"
-                                                class="flaticon2-reload text-warning"
-                                            />
-                                        </span>
-                                    </div>
                                 </div>
                                 <!--begin::Action-->
                                 <div class="kt-login__actions">
@@ -167,13 +144,10 @@ import { mapGetters, mapActions } from 'vuex';
 function getInitData() {
     return {
         isLoading: false,
-        imgCaptcha: '',
         loginData: {
             userName: '',
             password: '',
             token: '',
-            captcha: '',
-            md5Captcha: '',
         },
     };
 }
@@ -190,109 +164,72 @@ var opts = {
         onSubmit: function () {
             this.doLogin();
         },
-        onVerify(response) {
-            this.isLoading = true;
-            this.$http({
-                data: {
-                    m: 'user',
-                    fn: 'verify_captcha',
-                    token: response,
-                },
-            })
-                .then((response) => {
-                    if (response.success) {
-                        this.isLoading = false;
-                        this.doLogin();
-                    }
-                })
-                .catch((ex) => {
-                    this.$message(ex.message, 'error');
-                    this.resetRecaptcha();
-                });
-        },
-        onExpired() {
-            console.log('Expired');
-        },
-        updateTokenFireBase(token) {
-            this.$http({
-                data: {
-                    m: 'FCMToken',
-                    fn: 'save',
-                    token: token,
-                },
-            })
-                .then(() => {})
-                .catch((ex) => {
-                    this.$message(ex.message, 'error');
-                    this.resetRecaptcha();
-                });
-        },
-        resetRecaptcha() {
-            this.$refs.invisibleRecaptcha.reset(); // Direct call reset method
-        },
+        // onVerify(response) {
+        //     this.isLoading = true;
+        //     this.$http({
+        //         data: {
+        //             m: 'user',
+        //             fn: 'verify_captcha',
+        //             token: response,
+        //         },
+        //     })
+        //         .then((response) => {
+        //             if (response.success) {
+        //                 this.isLoading = false;
+        //                 this.doLogin();
+        //             }
+        //         })
+        //         .catch((ex) => {
+        //             this.$message(ex.message, 'error');
+        //             this.resetRecaptcha();
+        //         });
+        // },
+        // onExpired() {
+        //     console.log('Expired');
+        // },
+        // updateTokenFireBase(token) {
+        //     this.$http({
+        //         data: {
+        //             m: 'FCMToken',
+        //             fn: 'save',
+        //             token: token,
+        //         },
+        //     })
+        //         .then(() => {})
+        //         .catch((ex) => {
+        //             this.$message(ex.message, 'error');
+        //             this.resetRecaptcha();
+        //         });
+        // },
+        // resetRecaptcha() {
+        //     this.$refs.invisibleRecaptcha.reset(); // Direct call reset method
+        // },
         doLogin() {
-            if (!this.loginData.userName || !this.loginData.password || !this.loginData.captcha) {
+            if (!this.loginData.userName || !this.loginData.password) {
                 return this.$alert('Thông báo', 'Vui lòng nhập đầy đủ thông tin!', 'error');
             } else {
                 var obj = Object.assign({}, this.loginData);
                 this.isLoading = true;
                 this.logIn(obj)
                     .then(() => {
-                        //add token firebase
-                        // this.fireBaseGetToken().then(token => {
-                        //    this.updateTokenFireBase(token);
-                        // });
-
-                        this.isLoading = false;
-                        this.initSystem().then(() => {
-                            this.done = true;
-                            let tempSettings = this.appSettings;
-
-                            tempSettings = Object.assign(tempSettings, this.system);
-                            this.updateDict(this.system.dictionarys);
-                            this.updateAppSettings(tempSettings);
-                            this.CompanyId = this.system.companyId;
-
-                            if (this.$route.query && this.$route.query.returnUrl)
-                                this.$router.push(decodeURIComponent(this.$route.query.returnUrl));
-                            else this.$router.push('/');
-                        });
+                        let tempSettings = this.appSettings;
+                        tempSettings = Object.assign(tempSettings, this.system);
+                        this.updateAppSettings(tempSettings);
+                        if (this.$route.query && this.$route.query.returnUrl)
+                            this.$router.push(decodeURIComponent(this.$route.query.returnUrl));
+                        else this.$router.push('/');
                     })
-                    .catch((response) => {
-                        this.$error(response.message);
-                        clearTimeout(this.timeDelay);
-                        this.timeDelay = setTimeout(() => {
-                            location.reload();
-                        }, 800);
-                    });
             }
-        },
-        getCaptcha() {
-            this.$http({
-                data: {
-                    m: 'user',
-                    fn: 'get_captcha',
-                },
-            })
-                .then((response) => {
-                    this.loginData.captcha = '';
-                    this.imgCaptcha = response.data;
-                    this.loginData.md5Captcha = response.content;
-                })
-                .catch(() => {});
         },
     },
     created() {
-        this.getCaptcha();
-        if (!process.env.VUE_ENV)
+        // if (!process.env.VUE_ENV)
             if (localStorage.getItem(this.CONSTANTS.AUTH_TOKEN)) {
                 if (this.$route.query && this.$route.query.returnUrl)
                     this.$router.push(decodeURIComponent(this.$route.query.returnUrl));
                 else this.$router.push('/');
             }
-        localStorage.setItem(this.CONSTANTS.CURRENT_VERSION, this.appSettings.Version);
     },
-    watch: {},
 };
 export default opts;
 </script>

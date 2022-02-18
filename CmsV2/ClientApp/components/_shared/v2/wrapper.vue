@@ -67,7 +67,7 @@
                             </div>
                         </li>
                         <li class="itm-topbar noti-remind">  
-                            <notify-list @show="dropDown(-1)" ref="notilst"></notify-list>                            
+                            <!-- <notify-list @show="dropDown(-1)" ref="notilst"></notify-list>                             -->
                         </li>
                         <li class="itm-topbar user-profile">
                             <div class="js-btn-showPopHeader">
@@ -140,12 +140,9 @@ header{z-index: 97 !important;}
 </style>
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import notifyList from './notify-list.vue';
  import siteFooter from './site-footer.vue';
-//import LanguageSelect from './language-select';
 export default {
-  components: { notifyList,siteFooter },
-    //components: { LanguageSelect,fireBase },
+  components: { siteFooter },
     data() {
         return {
             versions: [],
@@ -187,7 +184,7 @@ export default {
             if (index == this.menuIndex)
                 index = -1;
             this.menuIndex = index;
-            this.$refs.notilst.showListPanel(false);
+            // this.$refs.notilst.showListPanel(false);
         },
         dropDown(index) {
             if (this.menuIndex == index) this.menuIndex = -1;

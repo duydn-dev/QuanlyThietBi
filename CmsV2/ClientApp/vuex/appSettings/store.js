@@ -13,8 +13,6 @@ const store = {
     mutations: {
         UPDATE_APP_SETTINGS: (state, payload) => {
             payload.dictionarys = null;
-            if (payload && payload.companyId)
-                payload.CompanyId = payload.companyId;
             state.appSettings = payload;
             if (typeof (window) !== 'undefined') {
                 window.appSettings = Object.assign(window.appSettings, payload);

@@ -1,9 +1,7 @@
 ﻿import axios from '../../core/plugins/http';
 import CONSTANTS from '../../core/utils/constants';
-import { resolve } from 'path';
-import { rejects } from 'assert';
-import { ucs2 } from 'punycode';
 
+const apiUrl = window.appSettings.ApiUrl;
 export const SetTokenLocalstorage = ({ commit }, user) => {
     return new Promise((resolve, reject) => {
         if (user && user.token && typeof localStorage !== 'undefined') {
@@ -28,36 +26,38 @@ export const logOut = ({ commit }) => {
 };
 
 export const logIn = ({ commit }, data) => {
-    return new Promise((resolve, reject) => {
-        axios({
-            method: 'post',
-            data: {
-                m: 'user',
-                fn: 'login',
-                username: data.userName,
-                password: data.password,
-                captcha: data.captcha,
-                md5Captcha: data.md5Captcha
-            }
-        })
-            .then(rs => {
-                var response = rs.data;
-                if (response.user && response.user.token && typeof localStorage !== 'undefined') {
-                    localStorage.setItem(CONSTANTS.AUTH_TOKEN, response.user.token);
-                }
-                commit('LOGGEDIN', response.user);
-                if (typeof localStorage !== 'undefined') {
-                    localStorage.setItem(CONSTANTS.CURRENT_USER, JSON.stringify(response.user));
-                    //localStorage.setItem(CONSTANTS.PERMISSIONS, JSON.stringify(response.allPermission));
-                    //localStorage.setItem(CONSTANTS.USER_PERMISSIONS, JSON.stringify(response.userPermission));
-                }
-                return resolve(response);
-            })
-            .catch(err => {
-                commit('LOGGEDIN_ERROR');
-                return reject(err);
-            });
-    });
+    return axios({
+        url: `${apiUrl}/api/User/login`,
+        method: 'post',
+        data: data
+    }).then(response => {
+        if (response.responseData && response.responseData.token && typeof localStorage !== 'undefined') {
+            localStorage.setItem(CONSTANTS.AUTH_TOKEN, response.responseData.token);
+        }
+        commit('LOGGEDIN', response.responseData);
+        if (typeof localStorage !== 'undefined') {
+            localStorage.setItem(CONSTANTS.CURRENT_USER, JSON.stringify(response.responseData));
+        }
+    })
+    // return new Promise((resolve, reject) => {
+    //     axios.post(`${apiUrl}/api/User/login`, data)
+    //     .then(response => {
+    //         console.log('response', response)
+    //         // if (response.user && response.user.token && typeof localStorage !== 'undefined') {
+    //         //     localStorage.setItem(CONSTANTS.AUTH_TOKEN, response.user.token);
+    //         // }
+    //         // commit('LOGGEDIN', response.user);
+    //         // if (typeof localStorage !== 'undefined') {
+    //         //     localStorage.setItem(CONSTANTS.CURRENT_USER, JSON.stringify(response.user));
+    //         // }
+    //         return resolve(response);
+    //     })
+    //     .catch(err => {
+    //         console.log('response', err)
+    //         commit('LOGGEDIN_ERROR');
+    //         return reject(err);
+    //     });
+    // });
 };
 
 export const getUserInfo = ({ commit }) => {
@@ -71,7 +71,6 @@ export const getUserInfo = ({ commit }) => {
                 localStorage.removeItem(CONSTANTS.CURRENT_USER);
             }
             commit('USER_INFO_ERROR', err);
-            console.log(err);
         });
 };
 

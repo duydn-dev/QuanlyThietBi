@@ -100,25 +100,6 @@
         <!--<guide v-if="openTutorialPopup" @closePopup="triggerClick('openTutorialPopup')"></guide>-->
         <send-error v-if="openSendErrorPopup" @closePopup="triggerClick('openSendErrorPopup')"></send-error>
         <notifications group="foo" />
-        <modalv2 v-if="hasNewVersion" @close="hasNewVersion=false">
-            <div slot="body">
-                <h5
-                    style="color:red;"
-                >Hệ thống đã có phiên bản mới! Hãy lưu dữ liệu và F5 để cập nhật.</h5>
-            </div>
-            <div slot="footer">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <button class="btn btn-primary" @click="reloadNow">
-                            <span>Cập nhật ngay</span>
-                        </button>
-                        <button class="btn btn-secondary" @click="hasNewVersion=false">
-                            <span>Đóng</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </modalv2>
 
         <!--<progressBar />-->
         <!-- https://service.O2Tech.vn/ -->
@@ -184,8 +165,7 @@ export default {
             sessionTimeOut: 20 * 60,
             logOutDelay: 30,
             delayTimeOut: null,
-            timeOut: null,
-            hasNewVersion: false
+            timeOut: null
         };
     },
     computed: {
@@ -411,30 +391,6 @@ export default {
                 }
             }, 1000);
         },
-        checkVersion() {
-            setInterval(() => {
-                if (window.XMLHttpRequest) {
-                    var xhr = new XMLHttpRequest();
-                    xhr.onreadystatechange = () => {
-                        if (xhr.status == 200 && xhr.readyState == 4) {
-                            var sourceCode = xhr.responseText;
-                            if (sourceCode != window.appSettings.Version) {
-                                this.hasNewVersion = true;
-                                //this.$notify({
-                                //    group: 'foo',
-                                //    title: 'Thông báo',
-                                //    text: 'Hệ thống vừa cập nhật phiên bản mới, vui lòng lưu dữ liệu & F5 để cập nhật!',
-                                //    type: 'info',
-                                //    duration: 30000,
-                                //});
-                            }
-                        }
-                    };
-                    xhr.open('GET', '/api/version', true);
-                    xhr.send(null);
-                }
-            }, 30000);
-        },
         reloadNow() {
             window.location.reload();
         },
@@ -504,7 +460,6 @@ export default {
     },
     created() {
         this.initMenuData();
-        this.checkVersion();
         //this.initSession();
     }
 };
