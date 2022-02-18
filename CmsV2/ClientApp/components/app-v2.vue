@@ -459,7 +459,7 @@ export default {
         window.removeEventListener('resize', this.handleResize);
     },
     created() {
-        this.initMenuData();
+        // this.initMenuData();
         //this.initSession();
     }
 };

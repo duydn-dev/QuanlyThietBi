@@ -15,47 +15,9 @@ let _routers = [
         path:'/',
         component: AppV2,
         children:[
-            // calendar
             {
                 path: '/',
-                component: _import('dashboard/v2/index'),
-                meta: { requiresAuth: true }
-            },
-
-            // meet
-            {
-                path: '/management',
-                component: _import('management/index'),
-                meta: { requiresAuth: true }
-            },
-            {
-                path: '/management/user',
-                component: _import('management/user/index'),
-                meta: { requiresAuth: true }
-            },
-            {
-                path: '/management/department',
-                component: _import('management/department/index'),
-                meta: { requiresAuth: true }
-            },
-            {
-                path: '/management/role',
-                component: _import('management/role/index'),               
-                meta: { requiresAuth: true }
-            },
-            {
-                path: '/management/company',
-                component: _import('management/company/manager'),
-                meta: { requiresAuth: true }
-            },
-            {
-                path: '/management/config',
-                component: _import('management/config/manager'),
-                meta: { requiresAuth: true }
-            },
-            {
-                path: '/management/category',
-                component: _import('management/category/index'),
+                component: _import('dashboard/index'),
                 meta: { requiresAuth: true }
             },
         ]

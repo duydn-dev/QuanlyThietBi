@@ -369,17 +369,10 @@
 </template>
 
 <style>
-
-@import '/assets/vendors/general/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css';
 @import '/assets/vendors/general/bootstrap-datetime-picker/css/bootstrap-datetimepicker.css';
 @import '/assets/vendors/general/bootstrap-timepicker/css/bootstrap-timepicker.css';
 @import '/assets/vendors/general/bootstrap-daterangepicker/daterangepicker.css';
-
-@import '/assets/vendors/general/bootstrap-select/dist/css/bootstrap-select.css';
-@import '/assets/vendors/general/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css';
-@import '/assets/vendors/general/select2/dist/css/select2.css';
 @import '/assets/vendors/general/animate.css/animate.css';
-@import '/assets/vendors/general/sweetalert2/dist/sweetalert2.css';
 @import '/assets/vendors/general/socicon/css/socicon.css';
 @import '/assets/vendors/custom/vendors/line-awesome/css/line-awesome.css';
 @import '/assets/vendors/custom/vendors/flaticon/flaticon.css';
@@ -389,18 +382,15 @@
 @import '/assets/css/style.bundle.css';
 @import '/assets/css/dark.css';
 @import '/assets/css/custom.css';
+@import '/assets-v2/meet/css/style-meet.css';
 </style>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import CONSTANTS from '../core/utils/constants';
-
-// import menuLeft from './_shared/menu-left-v2';
 import siteFooter from './_shared/site-footer';
 import stickyToolbar from './_shared/sticky-toolbar';
 import quickPanel from './_shared/quick-panel';
-//import menuTop from './_shared/menu-top';
-//import guide from './videotutorial/display';
 let menuMode = '';
 if (typeof localStorage !== 'undefined') {
     try {

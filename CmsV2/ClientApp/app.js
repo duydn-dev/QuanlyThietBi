@@ -120,7 +120,6 @@ import vGanttChart from 'v-gantt-chart';
 import ZoneSelect from './components/_common/zone-select';
 import Wrapper from './components/_shared/wrapper';
 import WrapperV2 from './components/_shared/v2/wrapper';
-import ManagementWrapper from './components/management/management-wrapper';
 import VueCompositionAPI from '@vue/composition-api'
 import VTooltip from 'v-tooltip'
 
@@ -257,7 +256,6 @@ Vue.component('comment', comment);
 Vue.component('zone-select', ZoneSelect);
 Vue.component('wrapper', Wrapper);
 Vue.component('wrapperv2', WrapperV2);
-Vue.component('managementwrapper', ManagementWrapper);
 
 import "vue-select/dist/vue-select.css";
 import 'vue-multiselect/dist/vue-multiselect.min.css';

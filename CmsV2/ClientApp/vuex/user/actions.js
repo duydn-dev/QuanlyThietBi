@@ -39,25 +39,6 @@ export const logIn = ({ commit }, data) => {
             localStorage.setItem(CONSTANTS.CURRENT_USER, JSON.stringify(response.responseData));
         }
     })
-    // return new Promise((resolve, reject) => {
-    //     axios.post(`${apiUrl}/api/User/login`, data)
-    //     .then(response => {
-    //         console.log('response', response)
-    //         // if (response.user && response.user.token && typeof localStorage !== 'undefined') {
-    //         //     localStorage.setItem(CONSTANTS.AUTH_TOKEN, response.user.token);
-    //         // }
-    //         // commit('LOGGEDIN', response.user);
-    //         // if (typeof localStorage !== 'undefined') {
-    //         //     localStorage.setItem(CONSTANTS.CURRENT_USER, JSON.stringify(response.user));
-    //         // }
-    //         return resolve(response);
-    //     })
-    //     .catch(err => {
-    //         console.log('response', err)
-    //         commit('LOGGEDIN_ERROR');
-    //         return reject(err);
-    //     });
-    // });
 };
 
 export const getUserInfo = ({ commit }) => {
