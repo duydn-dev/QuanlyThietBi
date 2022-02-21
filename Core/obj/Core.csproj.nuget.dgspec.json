@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\E_Data\\o2Tech\\DTINet5\\QuanlyThietBi\\Core\\Core.csproj": {}
+    "D:\\Hoan\\O2_Project\\DTI\\Core\\Core.csproj": {}
   },
   "projects": {
-    "D:\\E_Data\\o2Tech\\DTINet5\\QuanlyThietBi\\Core\\Core.csproj": {
+    "D:\\Hoan\\O2_Project\\DTI\\Core\\Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\E_Data\\o2Tech\\DTINet5\\QuanlyThietBi\\Core\\Core.csproj",
+        "projectUniqueName": "D:\\Hoan\\O2_Project\\DTI\\Core\\Core.csproj",
         "projectName": "Core",
-        "projectPath": "D:\\E_Data\\o2Tech\\DTINet5\\QuanlyThietBi\\Core\\Core.csproj",
+        "projectPath": "D:\\Hoan\\O2_Project\\DTI\\Core\\Core.csproj",
         "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-        "outputPath": "D:\\E_Data\\o2Tech\\DTINet5\\QuanlyThietBi\\Core\\obj\\",
+        "outputPath": "D:\\Hoan\\O2_Project\\DTI\\Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -100,7 +100,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

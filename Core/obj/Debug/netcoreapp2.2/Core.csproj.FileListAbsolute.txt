@@ -18,3 +18,12 @@ D:\E_Data\o2Tech\DTINet5\QuanlyThietBi\Core\obj\Debug\netcoreapp2.2\Core.Assembl
 D:\E_Data\o2Tech\DTINet5\QuanlyThietBi\Core\obj\Debug\netcoreapp2.2\Core.csproj.CoreCompileInputs.cache
 D:\E_Data\o2Tech\DTINet5\QuanlyThietBi\Core\obj\Debug\netcoreapp2.2\Core.dll
 D:\E_Data\o2Tech\DTINet5\QuanlyThietBi\Core\obj\Debug\netcoreapp2.2\Core.pdb
+D:\Hoan\O2_Project\DTI\Core\bin\Debug\netcoreapp2.2\Core.deps.json
+D:\Hoan\O2_Project\DTI\Core\bin\Debug\netcoreapp2.2\Core.dll
+D:\Hoan\O2_Project\DTI\Core\bin\Debug\netcoreapp2.2\Core.pdb
+D:\Hoan\O2_Project\DTI\Core\obj\Debug\netcoreapp2.2\Core.csprojAssemblyReference.cache
+D:\Hoan\O2_Project\DTI\Core\obj\Debug\netcoreapp2.2\Core.AssemblyInfoInputs.cache
+D:\Hoan\O2_Project\DTI\Core\obj\Debug\netcoreapp2.2\Core.AssemblyInfo.cs
+D:\Hoan\O2_Project\DTI\Core\obj\Debug\netcoreapp2.2\Core.csproj.CoreCompileInputs.cache
+D:\Hoan\O2_Project\DTI\Core\obj\Debug\netcoreapp2.2\Core.dll
+D:\Hoan\O2_Project\DTI\Core\obj\Debug\netcoreapp2.2\Core.pdb

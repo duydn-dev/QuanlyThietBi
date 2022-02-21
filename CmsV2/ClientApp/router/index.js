@@ -26,6 +26,26 @@ let _routers = [
                 component: _import('user/index'),
                 meta: { requiresAuth: true }
             },
+            {
+                path: '/roles',
+                component: _import('role/index'),
+                meta: { requiresAuth: true }
+            },
+            {
+                path: '/reports',
+                component: _import('report/index'),
+                meta: { requiresAuth: true }
+            },
+            {
+                path: '/reports/detail',
+                component: _import('report/detail'),
+                meta: { requiresAuth: true }
+            },
+            {
+                path: '/reports/input-data',
+                component: _import('report/input-data'),
+                meta: { requiresAuth: true }
+            },
         ]
     },
     {        
