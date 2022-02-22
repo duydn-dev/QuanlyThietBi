@@ -68,7 +68,7 @@ namespace Neac.BusinessLogic.Repository
                                    where ur.UserId == userId
                                    select r).Distinct().ToListAsync();
 
-                var userRoles = new GetRolesByUserDtos { UserId = userId, Roles = roles };
+                var userRoles = new GetRolesByUserDtos { UserId = userId, Roles = _mapper.Map<List<Role>,List<RoleDto>>(roles) };
                 _memoryCache.Set($"user/{userId}", userRoles);
 
                 return Response<GetRolesByUserDtos>.CreateSuccessResponse(userRoles);
@@ -164,7 +164,7 @@ namespace Neac.BusinessLogic.Repository
                                    join r in _unitOfWork.GetRepository<Role>().GetAll() on ur.RoleId equals r.RoleId
                                    where ur.UserId == request.UserId
                                    select r).ToListAsync();
-                var userRoles = new GetRolesByUserDtos { UserId = request.UserId, Roles = roles };
+                var userRoles = new GetRolesByUserDtos { UserId = request.UserId, Roles = _mapper.Map<List<Role>, List<RoleDto>>(roles) };
 
                 _memoryCache.Remove($"user/{request.UserId}");
                 _memoryCache.Set($"user/{request.UserId}", userRoles);
@@ -207,7 +207,11 @@ namespace Neac.BusinessLogic.Repository
         {
             try
             {
-                var query = await _unitOfWork.GetRepository<GroupRole>().GetAll().Include(n => n.Roles).ToListAsync();
+                var query = await _unitOfWork.GetRepository<GroupRole>()
+                    .GetAll()
+                    .OrderBy(n => n.GroupRoleName)
+                    .Include(n => n.Roles.OrderBy(n => n.RoleName))
+                    .ToListAsync();
                 var mapped = _mapper.Map<List<GroupRole>, List<GroupRoleAndRoleDto>>(query);
                 return Response<List<GroupRoleAndRoleDto>>.CreateSuccessResponse(mapped);
             }

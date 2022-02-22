@@ -25,3 +25,5 @@ Neac.BusinessLogic/obj/Debug/net5.0/Neac.BusinessLogic.csprojAssemblyReference.c
 /CmsV2/Logs/**
 /CmsV2/bin/**
 /CmsV2/obj/**
+/Core/bin/**
+/Core/obj/**

@@ -35,6 +35,7 @@ namespace Neac.Api.Controllers
         }
         
         [Route("{userPositionId}")]
+        [Authorize]
         [HttpGet]
         public async Task<Response<UserPositionDto>> GetUserPositionsByIdAsync([FromRoute] Guid userPositionId)
         {

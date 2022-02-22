@@ -37,6 +37,7 @@
                         v-model="form.userPositionId"
                         :options="userPosition"
                         :reduce="(n) => n.userPositionId"
+                        :selectable="(option) => !option.isAdministrator"
                         label="userPositionName"
                         placeholder="Chọn nhóm tài khoản"
                     />
@@ -98,6 +99,8 @@
                 </li>
                 <li class="d-flex flex-column">
                     <label class="txt-tit">Ảnh đại diện</label>
+                    <img :src="`${form.avatar ? (storageUrl + '/' + form.avatar) : '/img/46.png'}`" width="150" height="150" class="m-auto rounded-circle">
+                    <upload-avatar :exts="'png;jpg;jpeg'" :multiple="false" @uploaded="fileUploaded" class="mt-2" />
                 </li>
             </ul>
         </div>
@@ -111,10 +114,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import axiosService from '../../core/utils/axiosService';
+import UploadAvatar from '../_common/file-select/upload-avatar.vue'
 export default {
     props: ['userId'],
+    components: {
+        UploadAvatar,
+    },
     data() {
         return {
             form: {},
@@ -123,8 +130,12 @@ export default {
     },
     computed: {
         ...mapGetters(['userStatus']),
+        storageUrl(){
+            return this.appSettings.storageDomain
+        }
     },
     methods: {
+        ...mapActions(['updateAvatar']),
         getById() {
             if (this.userId) {
                 axiosService.get(`api/User/${this.userId}`).then(({ data }) => {
@@ -137,7 +148,7 @@ export default {
         userPositionDropdown() {
             axiosService.get(`api/Position/dropdown`).then(({ data }) => {
                 if (data.success) {
-                    this.userPosition = data.responseData;
+                    this.userPosition = data.responseData.map(n => ({...n, disabled: true}));
                 }
             });
         },
@@ -145,6 +156,11 @@ export default {
             if (this.userId) {
                 axiosService.put(`api/User/update/${this.userId}`, this.form).then(({ data }) => {
                     if (data.success) {
+                        if(this.form.userId == this.currentUser.userId){
+                            const currentUser = this.currentUser;
+                            currentUser.avatar = this.form.avatar;
+                            this.updateAvatar(currentUser)
+                        }
                         this.$message('Cập nhật thông tin tài khoản thành công !');
                         this.$emit('close', true);
                     } else {
@@ -170,6 +186,11 @@ export default {
                 });
             }
         },
+        fileUploaded(file){
+            if(file){
+                this.form.avatar = file.path;
+            }
+        },
         close() {
             this.$emit('close', false);
         },
@@ -181,5 +202,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+.preview{
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid #e5e5e5;
+    padding: 10px;
+}
 </style>

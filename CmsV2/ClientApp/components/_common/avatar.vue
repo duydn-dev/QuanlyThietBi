@@ -99,9 +99,10 @@ export default {
             let source = this.src;
             if (this.isImage) {
                 if (this.src.lastIndexOf('http') == -1)
-                    source = this.appSettings.configs.storageDomain + this.src;
+                    source = this.appSettings.storageDomain + "/" + this.src;
+                    
                 if (
-                    (source.lastIndexOf(this.appSettings.configs.storageDomain) != -1 ||
+                    (source.lastIndexOf(this.appSettings.storageDomain) != -1 ||
                         source.lastIndexOf('dekiru.vn') != -1) &&
                     source.lastIndexOf('?') == -1
                 ) {

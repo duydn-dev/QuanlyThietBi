@@ -208,11 +208,7 @@ footer {
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import CONSTANTS from '../core/utils/constants';
-
-//import headerTop from './_shared/v2/header-top';
 import menuLeft from './_shared/menu-left-v2.vue';
-// import siteFooter from './_shared/site-footer.vue';
-// import stickyToolbar from './_shared/sticky-toolbar';
 
 let menuMode = '';
 if (typeof localStorage !== 'undefined') {
@@ -226,12 +222,6 @@ export default {
     name: 'AppV2',
     components: {
         menuLeft,
-        // siteFooter,
-        // stickyToolbar,
-        // quickPanel,
-        //menuTop,
-        //guide,
-        //headerTop,
     },
     data() {
         return {
@@ -266,7 +256,7 @@ export default {
             'openSendErrorPopup',
             'blocks',
             'menuData',
-        ]),
+        ])
     },
     methods: {
         ...mapActions(['logOut', 'initSystem', 'updateAppSettings']),
@@ -410,25 +400,25 @@ export default {
         toggleMenuMode() {
             this.menuMode == 'enlarged' ? (this.menuMode = '') : (this.menuMode = 'enlarged');
         },
-        changeCompany(id) {
-            let loading = this.$loading.show();
-            this.initSystem({ swCompanyId: id }).then(() => {
-                loading.hide();
-                this.done = true;
-                this.appSettings.CompanyId = id;
-                let tempSettings = this.appSettings;
-                var enumCustomFieldObjects = {};
-                //for (var i = 0; i < this.system.customFieldObjects.length; i++) {
-                //    enumCustomFieldObjects[
-                //        this.system.customFieldObjects[i].name
-                //    ] = this.system.customFieldObjects[i].id;
-                //}
-                tempSettings.enumCustomFieldObjects = enumCustomFieldObjects;
-                tempSettings = Object.assign(tempSettings, this.system);
-                this.updateAppSettings(tempSettings);
-                this.triggerClick('openCompanyPopup');
-            });
-        },
+        // changeCompany(id) {
+        //     let loading = this.$loading.show();
+        //     this.initSystem({ swCompanyId: id }).then(() => {
+        //         loading.hide();
+        //         this.done = true;
+        //         this.appSettings.CompanyId = id;
+        //         let tempSettings = this.appSettings;
+        //         var enumCustomFieldObjects = {};
+        //         //for (var i = 0; i < this.system.customFieldObjects.length; i++) {
+        //         //    enumCustomFieldObjects[
+        //         //        this.system.customFieldObjects[i].name
+        //         //    ] = this.system.customFieldObjects[i].id;
+        //         //}
+        //         tempSettings.enumCustomFieldObjects = enumCustomFieldObjects;
+        //         tempSettings = Object.assign(tempSettings, this.system);
+        //         this.updateAppSettings(tempSettings);
+        //         this.triggerClick('openCompanyPopup');
+        //     });
+        // },
         initSession() {
             this.logOutDelay = 30;
             this.timeOut = setInterval(() => {
@@ -555,10 +545,6 @@ export default {
     },
     destroyed() {
         window.removeEventListener('resize', this.handleResize);
-    },
-    created() {
-        // this.initMenuData();
-        //this.initSession();
     },
 };
 </script>

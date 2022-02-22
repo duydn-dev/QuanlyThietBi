@@ -1,491 +1,151 @@
 <template>
-    <modal id="modal-dashbroad"
-           :title="'Phân quyền người dùng: ' + form.name"
-           :width="1350"
-           @close="closePopup()">
+    <modalv2 id="modal-edit-class" :title="`Phân quyền người dùng`" @close="close" :width="1000">
         <div slot="body">
-            <div class="row">
-                <div class="col-sm-3">
-                    <div class="form-group mb-1">
-                        <label>Danh sách chức năng</label>
-                    </div>
-                    <label class="kt-checkbox mb-3 text-danger">
-                        <input v-model="selectAll" type="checkbox" ::checked="selectAll" />Chọn tất
-                        cả
-                        <span />
-                    </label>
-                </div>
-                <div class="col-sm-3">
-                    <div class="form-group mb-1">
-                        <label>Phân theo vai trò</label>
-                    </div>
-                    <select v-if="listRole && listRole.length > 0"
-                            v-model="currentRoleId"
-                            class="form-control"
-                            @change="getRolePermission(currentRoleId)">
-                        <option v-for="role in listRole" :key="'role_' + role.id" :value="role.id">
-                            {{ role.roleName }}
-                        </option>
-                    </select>
-                </div>
-                <div class="col-sm-6"></div>
-                <template v-for="group in memberPermission">
-                    <div class="mt-3"
-                         :class="
-                            !group.childGroup || group.childGroup.length == 0
-                                ? 'col-sm-3'
-                                : 'col-12 row'
-                        "
-                         :key="'g1_' + group.id"
-                         v-if="group.childGroup.length > 0 || group.permission.length > 0">
-                        <h5 style="
-                                background: #e9e7e7;
-                                padding: 8px 10px;
-                                width: 100%;
-                                color: #000000;
-                                text-transform: uppercase;
-                                font-weight: bold;
-                                font-size: 14px;
-                            ">
-                            {{ group.name }}
-                        </h5>
-                        <div class="group-permission">
-                            <div v-if="group.permission && group.permission.length > 0"
-                                 :key="'g_' + group.id"
-                                 class="mb-4"
-                                 :class="{
-                                'col-sm-2': group.childGroup && group.childGroup.length != 0,
-                            }">
-                                <div class="kt-checkbox-list">
-                                    <template v-for="per in group.permission">
-                                        <div v-if="per.isLevel > 0" :key="'p_' + per.code">
-                                            <label class="kt-checkbox">
-                                                <input v-model="per.isSelect"
-                                                       type="checkbox"
-                                                       ::checked="per.isSelect" />
-                                                {{ per.name }}
-                                                <span />
-                                            </label>
-                                            <div class="kt-radio-list"
-                                                 style="margin-left: 30px"
-                                                 v-if="per.isSelect">
-                                                <label class="kt-radio" v-if="per.isLevel == 2">
-                                                    <input v-model="per.level"
-                                                           :name="per.code"
-                                                           type="radio"
-                                                           :value="0" />
-                                                    Quản lý của tôi
-                                                    <span />
-                                                </label>
-                                                <label class="kt-radio" v-if="per.isLevel > 0">
-                                                    <input v-model="per.level"
-                                                           :name="per.code"
-                                                           type="radio"
-                                                           :value="1" />
-                                                    Quản lý chi nhánh
-                                                    <span />
-                                                </label>
-                                                <label class="kt-radio">
-                                                    <input v-model="per.level"
-                                                           :name="per.code"
-                                                           type="radio"
-                                                           :value="2" />
-                                                    Quản lý tất cả
-                                                    <span />
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <label v-else :key="'p_' + per.code" class="kt-checkbox">
-                                            <input v-model="per.isSelect"
-                                                   type="checkbox"
-                                                   :value="per.code" />
-                                            {{ per.name }}
-                                            <span />
-                                        </label>
-                                        <div :key="'pz_' + per.code" v-if="per.isSelect && per.isBaseZone && per.code == 'Document'">
-                                            <div v-for="zone in zoneWiki" :key="zone.id">
-                                                <label :key="'p_' + per.code"
-                                                       class="kt-checkbox ml-4">
-                                                    <input type="checkbox"
-                                                           :value="zone.id"
-                                                           :checked="(permissionZones.find(n => n.zoneId === zone.id && n.permissionCode === per.code))"
-                                                           @change="changeParent(zone,per)" />
-                                                    {{ zone.label }}
-                                                    <span />
-                                                </label>
-                                                <template v-if="zone.children">
-                                                    <div v-for="z in zone.children" :key="z.id" class="ml-4">
-                                                        <label :key="'p_' + per.code"
-                                                               class="kt-checkbox ml-4">
-                                                            <input type="checkbox"
-                                                                   :value="z.id"
-                                                                   :checked="(permissionZones.find(n => n.zoneId === z.id && n.permissionCode === per.code))"
-                                                                   @change="changeParent(z,per)" />
-                                                            {{ z.label }}
-                                                            <span />
-                                                        </label>
-                                                    </div>
-                                                </template>
-                                            </div>
-                                        </div>
-                                        <div :key="'pz_' + per.code" v-else-if="per.isSelect && per.isBaseZone && per.code != 'EditorialOfficeSecretary'">
-                                            <div v-for="zone in zones" :key="zone.id">
-                                                <label :key="'p_' + per.code"
-                                                       class="kt-checkbox ml-4">
-                                                    <input type="checkbox"
-                                                           :value="zone.id"
-                                                           :checked="(permissionZones.find(n => n.zoneId === zone.id && n.permissionCode === per.code))"
-                                                           @change="setPermissionZone(zone,per)" />
-                                                    {{ zone.name }}
-                                                    <span />
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </template>
-                                </div>
-                            </div>
-                            <template v-for="group2 in group.childGroup">
-                                <div v-if="group2.permission && group2.permission.length > 0"
-                                     :key="'g_' + group2.id"
-                                     class="col-sm-2 mb-4">
-                                    <label class="kt-checkbox">
-                                        <input v-model="group2.isSelect"
-                                               type="checkbox"
-                                               @change="changeGroup2(group2, group2.isSelect)" />
-                                        <b style="color: #c40404">{{ group2.name }}</b>
-                                        <span />
-                                    </label>
-                                    <div class="kt-checkbox-list">
-                                        <template v-for="per in group2.permission">
-                                            <div v-if="per.isLevel > 0" :key="'p_' + per.code">
-                                                <label class="kt-checkbox">
-                                                    <input v-model="per.isSelect"
-                                                           type="checkbox"
-                                                           ::checked="per.isSelect" />
-                                                    {{ per.name }}
-                                                    <span />
-                                                </label>
-                                                <div class="kt-radio-list"
-                                                     style="margin-left: 30px"
-                                                     v-if="per.isSelect">
-                                                    <label class="kt-radio" v-if="per.isLevel == 2">
-                                                        <input v-model="per.level"
-                                                               :name="per.code"
-                                                               type="radio"
-                                                               :value="0" />
-                                                        Quản lý của tôi
-                                                        <span />
-                                                    </label>
-                                                    <label class="kt-radio" v-if="per.isLevel > 0">
-                                                        <input v-model="per.level"
-                                                               :name="per.code"
-                                                               type="radio"
-                                                               :value="1" />
-                                                        Quản lý chi nhánh
-                                                        <span />
-                                                    </label>
-                                                    <label class="kt-radio">
-                                                        <input v-model="per.level"
-                                                               :name="per.code"
-                                                               type="radio"
-                                                               :value="2" />
-                                                        Quản lý tất cả
-                                                        <span />
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <label v-else :key="'p_' + per.code" class="kt-checkbox">
-                                                <input v-model="per.isSelect"
-                                                       type="checkbox"
-                                                       :value="per.code" />
-                                                {{ per.name }}
-                                                <span />
-                                            </label>
-                                        </template>
-                                    </div>
-                                </div>
-                            </template>
+            <div class="col-lg-12">
+                <div class="row">
+                    <div :class="`${item.roles && item.roles.length > 0 ? 'col-lg-4': ''}`" v-for="item in listPermission" :key="item.groupRoleId">
+                        <span class="d-flex align-items-center" v-if="item.roles && item.roles.length > 0">
+                            <input type="checkbox" :checked="item.isChecked" :id="item.groupRoleId" @change="checkAllChild($event, item.groupRoleId)">&ensp;<label :for="item.groupRoleId" class="cursor-pointer"><b>{{item.groupRoleName}}</b></label>
+                        </span>
+                        <div class="ml-2" v-if="item.roles && item.roles.length > 0">
+                            <span class="d-flex align-items-center" v-for="child in item.roles" :key="child.roleId">
+                                <input type="checkbox" :checked="child.isChecked" :id="child.roleId" @change="checkPermission($event, child.roleId, item.groupRoleId)">&ensp;<label class="cursor-pointer" :for="child.roleId">{{child.roleName}}</label>
+                                <br>
+                            </span>
                         </div>
                     </div>
-                </template>
+                </div>
             </div>
         </div>
         <div slot="footer">
-            <div class="row">
-                <div class="col-sm-12">
-                    <button class="btn btn-cyan" @click="updatePermission()">
-                        <span>Lưu lại</span>
-                    </button>
-                    <button class="btn btn-danger" @click="closePopup">
-                        <span>Đóng</span>
-                    </button>
-                </div>
-            </div>
+            <button class="btn btn-primary" @click="save">
+                <span>Lưu</span>
+            </button>
+            <button class="btn btn-secondary" @click="close">Đóng</button>
         </div>
-    </modal>
+    </modalv2>
 </template>
 
 <script>
-    import { mapActions } from 'vuex';
-    export default {
-        name: 'UserEdit',
-        props: ['memberId', 'name', 'roleId'],
-        data() {
-            return {
-                form: {
-                    name: '',
-                    code: '',
-                    id: 0,
-                },
-                currentRoleId: 0,
-                memberPermission: null,
-                selectAll: false,
-                listRole: [],
-                zones: [],
-                zoneWiki: [],
-                permissionZones: []
-            };
+import axiosService from '../../core/utils/axiosService';
+export default {
+    props: {
+        userId: {
+            type: String,
+            default: null,
         },
-        watch: {
-            selectAll(val) {
-                for (var group of this.memberPermission) {
-                    for (var per of group.permission) {
-                        per.isSelect = val;
-                    }
-
-                    var childGroup = group.childGroup;
-                    if (childGroup && childGroup.length > 0) {
-                        for (var chil of childGroup) {
-                            for (var per2 of chil.permission) {
-                                per2.isSelect = val;
-                            }
-                        }
-                    }
-                }
-            },
-            currentRoleId(val) {
-                if (val > 0) {
-                    this.selectAll = false;
-                }
-            },
+    },
+    data() {
+        return {
+            listPermission: [],
+            selectedPermission: [],
+        };
+    },
+    methods: {
+        async getListPermission() {
+            const { data } = await axiosService.get('api/Role');
+            this.listPermission = data.responseData.map(n => ({
+                groupRoleCode: n.groupRoleCode,
+                groupRoleId: n.groupRoleId,
+                groupRoleName: n.groupRoleName,
+                isChecked: false,
+                roles: n.roles ? n.roles.map(g => ({
+                    roleCode: g.roleCode,
+                    roleId: g.roleId,
+                    roleName: g.roleName,
+                    groupRoleId: g.groupRoleId,
+                    isChecked: false
+                })) : []
+            }));
         },
-        methods: {
-            ...mapActions(['getZoneDropdown', 'getZoneTree']),
-            closePopup() {
-                this.$emit('closePopup');
-            },
-            changeGroup2(g, checked) {
-                var per = g.permission;
-                for (let p of per) {
-                    p.isSelect = checked;
-                }
-            },
-            changeAll(g, checked) {
-                if (checked)
-                    g.zoneIds = _.map(this.appSettings.zones, 'id');
-                else
-                    g.zoneIds = [];
-            },
-            changeParent(o, p) {
-                this.setPermissionZone(o, p);
-                if (!o.children && o.children.length != 0) {
-                    for (let z of o.children) {
-                        this.setPermissionZone(z, p);
-                    }
-                }
-            },
-            getUserPermission() {
-                this.$http({
-                    data: {
-                        m: 'security',
-                        fn: 'userpermission_get_list_add',
-                        UserId: this.memberId,
-                    },
-                })
-                    .then((response) => {
-                        if (response.success) {
-                            this.memberPermission = response.data;
-                        }
-                    })
-                    .catch((err) => {
-                        return this.$message(err.message, 'error');
-                    });
-            },
-            getRolePermission(id) {
-                this.currentRoleId = id;
-                this.$http({
-                    data: {
-                        m: 'security',
-                        fn: 'rolepermission_get_list_add',
-                        roleId: id,
-                    },
-                })
-                    .then((response) => {
-                        if (response.success) {
-                            this.memberPermission = response.data;
-                        }
-                    })
-                    .catch((err) => {
-                        return this.$message(err.message, 'error');
-                    });
-            },
-            updatePermission() {
-                if (this.currentRoleId <= 0) {
-                    return this.$message(this.$t('Label.RequiredRole'), 'error');
-                }
-                let objPermission = [];
-                for (var group of this.memberPermission) {
-                    for (var per of group.permission) {
-                        if (per.isSelect) objPermission.push(per);
-                    }
-                    var childGroup = group.childGroup;
-                    if (childGroup && childGroup.length > 0) {
-                        for (var chil of childGroup) {
-                            for (var per2 of chil.permission) {
-                                if (per2.isSelect) objPermission.push(per2);
-                            }
-                        }
-                    }
-                }
-                let loading = this.$loading.show();
-                this.$http({
-                    data: {
-                        m: 'security',
-                        fn: 'user_permission_update',
-                        UserId: this.memberId,
-                        roleId: this.currentRoleId,
-                        UserPermission: JSON.stringify(objPermission),
-                        permissonZone: this.permissionZones
-                    },
-                })
-                    .then(() => {
-                        loading.hide();
-                        this.$emit('closePopup');
-                        this.$message(this.$t('Label.Successful'));
-                    })
-                    .catch((err) => {
-                        loading.hide();
-                        return this.$message(err.message, 'error');
-                    });
-            },
-            getListRole() {
-                this.$http({
-                    data: {
-                        m: 'security',
-                        fn: 'role_get_list',
-                    },
-                })
-                    .then((response) => {
-                        if (response.success) {
-                            this.listRole = response.data;
-                        }
-                    })
-                    .catch((err) => {
-                        return this.$message(err.message, 'error');
-                    });
-            },
-            setPermissionZone(zone, per) {
-                const i = _.findIndex(this.permissionZones, item => item.zoneId === zone.id && item.permissionCode === per.code);
-                if (i === -1) {
-                    this.permissionZones.push({
-                        userId: this.memberId,
-                        zoneId: zone.id,
-                        permissionCode: per.code
-                    })
-                }
-                else {
-                    this.permissionZones.splice(i, 1);
-                }
-                
-            },
-            getPerZoneById() {
-                this.$http({
-                    data: {
-                        m: 'security',
-                        fn: 'zone_permission_get_by_user',
-                        userId: this.memberId
-                    }
-                }).then(response => {
-                    this.permissionZones = response.data;
-                })
-
+        async getUserPermisson(){
+            const {data} = await axiosService.get(`api/Role/get-user-role/${this.userId}`);
+            this.selectedPermission = data.responseData.roles;
+            if(this.selectedPermission.length > 0){
+                this.setCheckedPermissions();
             }
         },
-        created() {
-            this.form.name = this.name;
-            this.currentRoleId = this.roleId;
-            this.getListRole();
-            this.getUserPermission();
-            this.getZoneDropdown({ type: 'NEWS' }).then((response) => {
-                this.zones = response.data;
+        setCheckedPermissions(){
+            // disctinct group id
+            const groupIds = [...new Set(this.selectedPermission.map(n => n.groupRoleId))];
+
+            // lấy ra thằng group id đã được phân quyền trc đó
+            const groups = this.listPermission.filter(n => groupIds.includes(n.groupRoleId)).map(n => n.groupRoleId);
+            const roleIds = this.selectedPermission.map(n => n.roleId);
+
+            // lặp thằng cha cho checked
+            this.listPermission.filter(n => groups.includes(n.groupRoleId)).forEach(e => {
+                e.isChecked = true;
+
+                // nếu thằng con có trong list đã check thì cho checked = true
+                if(e.roles && e.roles.length > 0){
+                    e.roles.filter(n => roleIds.includes(n.roleId)).forEach(c => {
+                        c.isChecked = true;
+                    })
+                }
             });
-            this.getZoneTree({type: 'WIKI'}).then((response) => {
-                this.zoneWiki = response;
-            });
-            this.getPerZoneById();
         },
-    };
+        checkPermission(event, roleId, groupId){
+            const group = this.listPermission.find(n => n.groupRoleId == groupId);
+            const role = group.roles.find(n => n.roleId == roleId);
+            role.isChecked = event.target.checked;
+            const rolesChecked = group.roles.filter(n => n.isChecked);
+            if(event.target.checked && rolesChecked.length == 1){
+                group.isChecked = true;
+            }
+            else if(!event.target.checked && rolesChecked.length == 0){
+                group.isChecked = false;
+            }
+
+            if(event.target.checked){
+                this.selectedPermission.push(role);
+            }
+            else{
+                const index = this.selectedPermission.findIndex(n => n.roleId == roleId);
+                this.selectedPermission = this.selectedPermission.filter((n, i) => i !== index);
+            }
+        },
+        checkAllChild(event, groupId){
+            // check thằng cha thì tích tất thằng con
+            const group = this.listPermission.find(n => n.groupRoleId == groupId);
+            group.isChecked = event.target.checked;
+            if(group.roles && group.roles.length > 0){
+                group.roles.forEach(e => {
+                    e.isChecked = event.target.checked;
+                    if(event.target.checked){
+                        this.selectedPermission.push(e);
+                    }
+                    else{
+                        const index = this.selectedPermission.findIndex(n => n.roleId == e.roleId);
+                        this.selectedPermission = this.selectedPermission.filter((n, i) => i !== index);
+                    }
+                });
+            }
+        },
+        async save() {
+            const request = {
+                userId: this.userId,
+                roleIds: this.selectedPermission.map(n => n.roleId)
+            }
+            const {data} = await axiosService.post('api/Role/update-user-role', request);
+            if(data.success){
+                this.$message('Cập nhật quyền cho người dùng thành công !');
+                this.close();
+            }
+            else{
+                this.$message('Cập nhật quyền cho người dùng thất bại !', 'error');
+            }
+        },
+        close() {
+            this.$emit('close', false);
+        },
+    },
+    async created() {
+        await this.getListPermission();
+        await this.getUserPermisson();
+    },
+};
 </script>
-<style>
-    .group-permission{max-height:400px; overflow:auto;}
-    .deadlineClass {
-        color: #ff0000;
-    }
 
-    #editor .ql-tooltip[data-mode='video'] {
-        left: 25% !important;
-        top: 35% !important;
-    }
-
-        #editor .ql-tooltip[data-mode='video'] input {
-            height: 80px !important;
-            width: 400px !important;
-        }
-
-    #editor {
-        height: 600px;
-    }
-
-    #news-avatar {
-        width: 100px;
-        height: 100px;
-    }
-
-    #news-wrapper .mu-text-field-label,
-    #news-wrapper .common-label {
-        font-weight: bold;
-        color: #000;
-    }
-
-    #related-course ul {
-        margin: 10px 0;
-    }
-
-    #related-course {
-        margin: 20px 0;
-    }
-
-        #related-course > button {
-            height: 25px !important;
-        }
-
-        #related-course li button {
-            height: 18px !important;
-            width: 20px !important;
-            position: absolute;
-            top: 8px;
-            left: 8px;
-        }
-
-            #related-course li button > div {
-                padding: 0px !important;
-            }
-
-        #related-course li {
-            position: relative;
-            padding-left: 40px;
-            padding: 8px 0 8px 50px;
-            background: #f1f1f1;
-            margin-bottom: 2px;
-        }
+<style scoped>
 </style>

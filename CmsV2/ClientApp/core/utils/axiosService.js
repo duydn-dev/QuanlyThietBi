@@ -1,8 +1,8 @@
 import axios from "axios";
 import CONSTANTS from './constants';
-const token = localStorage.getItem(CONSTANTS.AUTH_TOKEN)
 export default {
     get(url) {
+        const token = localStorage.getItem(CONSTANTS.AUTH_TOKEN);
         if (token) {
             return axios.get(`${window.appSettings.ApiUrl}/${url}`,
                 {
@@ -16,6 +16,7 @@ export default {
 
     },
     post(url, body) {
+        const token = localStorage.getItem(CONSTANTS.AUTH_TOKEN)
         if (token) {
             return axios.post(`${window.appSettings.ApiUrl}/${url}`, body,
                 {
@@ -28,6 +29,7 @@ export default {
         return axios.post(`${window.appSettings.ApiUrl}/${url}`, body);
     },
     put(url, body) {
+        const token = localStorage.getItem(CONSTANTS.AUTH_TOKEN)
         if (token) {
             return axios.put(`${window.appSettings.ApiUrl}/${url}`, body,
                 {
@@ -40,6 +42,7 @@ export default {
         return axios.put(`${window.appSettings.ApiUrl}/${url}`, body);
     },
     delete(url) {
+        const token = localStorage.getItem(CONSTANTS.AUTH_TOKEN)
         if (token) {
             return axios.delete(`${window.appSettings.ApiUrl}/${url}`,
                 {
@@ -52,6 +55,7 @@ export default {
         return axios.delete(`${window.appSettings.ApiUrl}/${url}`);
     },
     uploadFile(url, file){
+        const token = localStorage.getItem(CONSTANTS.AUTH_TOKEN)
         const formData = new FormData();
         if(file){
             formData.append('file', file);
@@ -71,6 +75,7 @@ export default {
         })
     },
     uploadFiles(url, files){
+        const token = localStorage.getItem(CONSTANTS.AUTH_TOKEN)
         const formData = new FormData();
         if(files && files.length > 0){
             files.forEach(file => {

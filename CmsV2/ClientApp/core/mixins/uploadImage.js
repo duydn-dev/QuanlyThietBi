@@ -1,5 +1,5 @@
 ﻿import Vue from 'vue';
-
+import axiosService from '../utils/axiosService';
 
 Vue.mixin({
     methods: {
@@ -7,18 +7,14 @@ Vue.mixin({
             return new Promise((resolve, reject) => {
                 let formData = new FormData();
                 formData.append('file', file);
-                this.$http({
-                    data: {
-                        m: "file",
-                        fn: "get_token",
-                        filename: file.name.replace(/&/gi, '-')
-                    }
-                }).then((response) => {
+
+                axiosService.get(`api/File/get_token?fname=${file.name.replace(/&/gi, '-')}`)
+                .then((response) => {
                     let data = response.data;
                     formData.append('token', data);
                     return this.$http(
                         {
-                            url: this.appSettings.configs.storageApiUrl + '?fn=upload',
+                            url: this.appSettings.storageApiUrl + '?fn=upload',
                             formData: true,
                             data: {
                                 token: data,

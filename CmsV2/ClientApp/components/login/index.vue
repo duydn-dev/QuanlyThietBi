@@ -141,6 +141,7 @@
 </style>
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import axiosService from '../../core/utils/axiosService';
 function getInitData() {
     return {
         isLoading: false,
@@ -164,46 +165,6 @@ var opts = {
         onSubmit: function () {
             this.doLogin();
         },
-        // onVerify(response) {
-        //     this.isLoading = true;
-        //     this.$http({
-        //         data: {
-        //             m: 'user',
-        //             fn: 'verify_captcha',
-        //             token: response,
-        //         },
-        //     })
-        //         .then((response) => {
-        //             if (response.success) {
-        //                 this.isLoading = false;
-        //                 this.doLogin();
-        //             }
-        //         })
-        //         .catch((ex) => {
-        //             this.$message(ex.message, 'error');
-        //             this.resetRecaptcha();
-        //         });
-        // },
-        // onExpired() {
-        //     console.log('Expired');
-        // },
-        // updateTokenFireBase(token) {
-        //     this.$http({
-        //         data: {
-        //             m: 'FCMToken',
-        //             fn: 'save',
-        //             token: token,
-        //         },
-        //     })
-        //         .then(() => {})
-        //         .catch((ex) => {
-        //             this.$message(ex.message, 'error');
-        //             this.resetRecaptcha();
-        //         });
-        // },
-        // resetRecaptcha() {
-        //     this.$refs.invisibleRecaptcha.reset(); // Direct call reset method
-        // },
         doLogin() {
             if (!this.loginData.userName || !this.loginData.password) {
                 return this.$alert('Thông báo', 'Vui lòng nhập đầy đủ thông tin!', 'error');
@@ -211,7 +172,10 @@ var opts = {
                 var obj = Object.assign({}, this.loginData);
                 this.isLoading = true;
                 this.logIn(obj)
-                    .then(() => {
+                    .then((userId) => {
+                        axiosService.get(`api/Role/get-user-role/${userId}`).then(({data}) => {
+                            this.initSystem({userPermission : data.responseData.roles, allPermission: data.responseData.roles})
+                        })
                         let tempSettings = this.appSettings;
                         tempSettings = Object.assign(tempSettings, this.system);
                         this.updateAppSettings(tempSettings);

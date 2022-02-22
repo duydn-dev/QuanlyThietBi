@@ -2,27 +2,7 @@
 import CONSTANTS from '../../core/utils/constants';
 
 export const initSystem = ({ commit }, payload) => {
-    return new Promise((resolve, reject) => {
-        commit("INIT_SYSTEM", {});
-        // return axios({
-        //     data: {
-        //         m: 'system',
-        //         fn: 'init',
-        //         ...payload
-        //     }
-        // }).then(response => {
-        //     if (response.success) {
-        //         commit("INIT_SYSTEM", response.data);
-        //         return resolve(response.data);
-        //     } else {
-        //         commit("INIT_SYSTEM", null);
-        //         return reject(err);
-        //     }
-        // }).catch(err => {
-        //     commit("INIT_SYSTEM", null);
-        //     return reject(err);
-        // });
-    })
+    commit("INIT_SYSTEM", payload);
 }
 
 

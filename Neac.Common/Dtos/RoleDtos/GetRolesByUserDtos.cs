@@ -10,6 +10,6 @@ namespace Neac.Common.Dtos.RoleDtos
     public class GetRolesByUserDtos
     {
         public Guid UserId { get; set; }
-        public List<Role> Roles { get; set; }
+        public List<RoleDto> Roles { get; set; }
     }
 }

@@ -17,7 +17,7 @@ if (!process.env.VUE_ENV) {
             };
         },
         computed: {
-            ...mapGetters(['systemHubProxy', 'calendarCurrentUser']),
+            ...mapGetters(['systemHubProxy', 'calendarCurrentUser', 'userPermissions']),
             isMobile() {
                 return this.ww < 767;
             },
@@ -56,104 +56,13 @@ if (!process.env.VUE_ENV) {
             },
             getUrlPreviewOffice(url) {
                 let temp = url;
-                // if (temp.indexOf('localhost') > -1)
-                //     temp = 'http://system-api.O2Tech.vn:80/Data/Temp/jp/39/190958.docx';
                 return `https://view.officeapps.live.com/op/embed.aspx?src=${temp}`;
             },
             handleResize() {
                 this.ww = window.innerWidth;
                 this.wh = window.innerHeight;
             },
-            badgeClassByStatus(status, toDate) {
-                if(status != this.statusSuccessId && new Date(toDate) < new Date()) return 'lbl-status bg-orange';
-                else if(status == this.statusSuccessId && new Date(toDate) < new Date()) return 'lbl-status bg-green';
-                else {
-                const data = this.appSettings.categories['projectStatus'].find((n) => n.id == status);
-                if (data) {
-                    if (data.code == this.CONSTANTS.PROJECT_STATUS.ProjectStatusNotStartYet) {
-                        return 'lbl-status bg-gray';
-                    } else if (data.code == this.CONSTANTS.PROJECT_STATUS.ProjectStatusInProcess) {
-                        return 'lbl-status bg-blue';
-                    } else if (data.code == this.CONSTANTS.PROJECT_STATUS.ProjectStatusReview) {
-                        return 'lbl-status bg-green';
-                    } else if (data.code == this.CONSTANTS.PROJECT_STATUS.ProjectStatusSuccess) {
-                        return 'lbl-status bg-light-green';
-                    } else if (data.code == this.CONSTANTS.PROJECT_STATUS.ProjectStatusStop) {
-                        return 'lbl-status bg-light-yellow';
-                    }
-                }
-                return '';
-            }
-            },
-            taskClassByStatus(id) {
-                const data = this.appSettings.categories['projectStatus'].find((n) => n.id == id);
-                if (data) {
-                    if (data.code == this.CONSTANTS.PROJECT_STATUS.ProjectStatusNotStartYet) {
-                        return 'bg-gray';
-                    } else if (data.code == this.CONSTANTS.PROJECT_STATUS.ProjectStatusInProcess) {
-                        return 'bg-blue';
-                    } else if (data.code == this.CONSTANTS.PROJECT_STATUS.ProjectStatusReview) {
-                        return 'bg-green';
-                    } else if (data.code == this.CONSTANTS.PROJECT_STATUS.ProjectStatusSuccess) {
-                        return 'bg-light-green';
-                    }
-                }
-                return '';
-            },
-            buildReportTitle(createName, processName, approveStatus, type){
-                if(approveStatus == this.CONSTANTS.APPROVED_STATUS.Send){
-                    return `${createName} đã gửi ${type == this.CONSTANTS.PROCESS_TYPE.REPORT ? 'báo cáo' : 'gia hạn'}`;
-                }
-                else if(approveStatus == this.CONSTANTS.APPROVED_STATUS.LeaderApproved){
-                    return `${processName} đã phê duyệt ${type == this.CONSTANTS.PROCESS_TYPE.REPORT ? 'báo cáo' : 'gia hạn'}`;
-                }
-                else if(approveStatus == this.CONSTANTS.APPROVED_STATUS.LeaderNotApproved){
-                    return `${processName} đã từ chối ${type == this.CONSTANTS.PROCESS_TYPE.REPORT ? 'báo cáo' : 'gia hạn'}`;
-                }
-                else if(approveStatus == this.CONSTANTS.APPROVED_STATUS.ProjectLeaderApproved){
-                    return `${processName} đã phê duyệt ${type == this.CONSTANTS.PROCESS_TYPE.REPORT ? 'báo cáo' : 'gia hạn'}`;
-                }
-                else if(approveStatus == this.CONSTANTS.APPROVED_STATUS.ProjectLeaderNotApproved){
-                    return `${processName} đã từ chối ${type == this.CONSTANTS.PROCESS_TYPE.REPORT ? 'báo cáo' : 'gia hạn'}`;
-                }
-                return "";
-            },
-            buildReportVersionTitle(version, objectType){
-                if(objectType == this.CONSTANTS.COMMENT_OBJECT_TYPE.task){
-                    if((!version.processVersionProcessBy || !version.processVersionForwardUser) && version.processVersionCreatedBy && version.processVersionApprovedStatus == this.CONSTANTS.APPROVED_STATUS.Send){
-                        return `${version.processVersionCreatedByUser} đã gửi ${version.processVersionType == this.CONSTANTS.PROCESS_TYPE.REPORT ? 'báo cáo': 'gia hạn'}`
-                    }
-                    if(version.processVersionProcessBy && version.processVersionForwardUser && version.processVersionApprovedStatus == this.CONSTANTS.APPROVED_STATUS.Send){
-                        return `${version.processVersionForwardUserFullName} đã chuyển ${version.processVersionType == this.CONSTANTS.PROCESS_TYPE.REPORT ? 'báo cáo': 'gia hạn'} cho ${version.processVersionProcessByUser}`
-                    }
-                    if(version.processVersionApprovedStatus == this.CONSTANTS.APPROVED_STATUS.LeaderApproved){
-                        return `${version.processVersionProcessByUser} đã phê duyệt ${version.processVersionType == this.CONSTANTS.PROCESS_TYPE.REPORT ? 'báo cáo': 'gia hạn'}`
-                    }
-                    if(version.processVersionApprovedStatus == this.CONSTANTS.APPROVED_STATUS.LeaderNotApproved){
-                        return `${version.processVersionProcessByUser} đã từ chối ${version.processVersionType == this.CONSTANTS.PROCESS_TYPE.REPORT ? 'báo cáo': 'gia hạn'}`
-                    }
-                }
-                else{
-                    if((!version.processedBy || !version.forwardProcessUser) && version.createdBy && version.approvedStatus == this.CONSTANTS.APPROVED_STATUS.Send){
-                        return `${version.createdByUser} đã gửi ${version.type == this.CONSTANTS.PROCESS_TYPE.REPORT ? 'báo cáo': 'gia hạn'}`
-                    }
-                    if(version.processedBy && version.forwardProcessUser && version.approvedStatus == this.CONSTANTS.APPROVED_STATUS.Send){
-                        return `${version.forwardUserFullName} đã chuyển ${version.type == this.CONSTANTS.PROCESS_TYPE.REPORT ? 'báo cáo': 'gia hạn'} cho ${version.processByUser}`
-                    }
-                    if(version.approvedStatus == this.CONSTANTS.APPROVED_STATUS.LeaderApproved){
-                        return `${version.processByUser} đã phê duyệt ${version.type == this.CONSTANTS.PROCESS_TYPE.REPORT ? 'báo cáo': 'gia hạn'}`
-                    }
-                    if(version.approvedStatus == this.CONSTANTS.APPROVED_STATUS.LeaderNotApproved){
-                        return `${version.processByUser} đã từ chối ${version.type == this.CONSTANTS.PROCESS_TYPE.REPORT ? 'báo cáo': 'gia hạn'}`
-                    }
-                }
-                
-                return "";
-            },
-            statusName(id) {
-                const data = this.appSettings.categories['projectStatus'].find((n) => n.id == id);
-                return data ? data.name : ""
-            },
+            
             isPermission(permissionIds, level) {
                 if (typeof permissionIds != 'object') permissionIds = [permissionIds];
                 let userPermission = this.userPermissions;
@@ -172,57 +81,14 @@ if (!process.env.VUE_ENV) {
                 if (level || level == 0) return permission[0].level == level;
                 return true;
             },
-            isPermissionZone(perZones, permissionZones, zones, userId) {
-                if (this.isPermission('EditorialOfficeSecretary'))
+            isAllowPermission(permissions){
+                if(this.currentUser.isAdministrator){
                     return true;
-                return _.filter(permissionZones, (item) => {
-                    const zoneIndex = _.findIndex(zones, n => n.zoneId === item.zoneId);
-                    const perCodeIndex = _.findIndex(perZones, n => n === item.permissionCode);
-                    if (zoneIndex !== -1 && perCodeIndex !== -1 && item.userId === userId) {
-                        return item;
-                    }
-                }).length > 0;
-            },
-            getIconPost(linkFile) {
-                if(linkFile){
-                    let kq = "";
-                    if (linkFile.toLowerCase().endsWith(".doc") || linkFile.toLowerCase().endsWith(".docx")) {
-                        kq = "word";
-                    }
-                    else if (linkFile.toLowerCase().endsWith(".pdf")) {
-                        kq = "pdf";
-                    }
-                    else if (linkFile.toLowerCase().endsWith(".xls") || linkFile.toLowerCase().endsWith(".xlsx")) {
-                        kq = "excel";
-                    }
-                    else if (linkFile.toLowerCase().endsWith(".pptx") || linkFile.toLowerCase().endsWith(".ppt")) {
-                        kq = "pptt";
-                    }
-                    else if (linkFile.toLowerCase().endsWith(".mp4")) {
-                        kq = "video";
-                    }
-                    else if (linkFile.toLowerCase().endsWith(".png") || linkFile.toLowerCase().endsWith(".jpg") || linkFile.toLowerCase().endsWith(".jpeg")) {
-                        kq = "image";
-                    }
-                    else {
-                        kq = "word";
-                    }
-                    return kq;
                 }
-                else{
-                    return "image";
+                if(typeof permissions === 'object'){
+                    return this.userPermissions.filter(n => permissions.includes(n.roleCode)).length > 0;
                 }
-            },
-            getStatus(newsStatus, status) {
-                return _.find(newsStatus, n => n.id == status);
-            },
-            zoneIdsByPermission(perZones, permissionZones, userId) {
-                return _.map(_.filter(permissionZones, (item) => {
-                    const perCodeIndex = _.findIndex(perZones, n => n === item.permissionCode);
-                    if (perCodeIndex !== -1 && item.userId === userId) {
-                        return item;
-                    }
-                }), n => n.zoneId);
+                return false;
             },
             isManangerAll(permissionIds) {
                 if (typeof permissionIds != 'object') permissionIds = [permissionIds];

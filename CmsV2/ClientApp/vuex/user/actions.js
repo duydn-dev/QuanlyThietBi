@@ -27,18 +27,23 @@ export const logOut = ({ commit }) => {
 };
 
 export const logIn = ({ commit }, data) => {
-    return axios({
-        url: `${apiUrl}/api/User/login`,
-        method: 'post',
-        data: data
-    }).then(response => {
-        if (response.responseData && response.responseData.token && typeof localStorage !== 'undefined') {
-            localStorage.setItem(CONSTANTS.AUTH_TOKEN, response.responseData.token);
-        }
-        commit('LOGGEDIN', response.responseData);
-        if (typeof localStorage !== 'undefined') {
-            localStorage.setItem(CONSTANTS.CURRENT_USER, JSON.stringify(response.responseData));
-        }
+    return new Promise((res, rej) => {
+        return axios({
+            url: `${apiUrl}/api/User/login`,
+            method: 'post',
+            data: data
+        }).then(response => {
+            if (response.responseData && response.responseData.token && typeof localStorage !== 'undefined') {
+                localStorage.setItem(CONSTANTS.AUTH_TOKEN, response.responseData.token);
+            }
+            commit('LOGGEDIN', response.responseData);
+            if (typeof localStorage !== 'undefined') {
+                localStorage.setItem(CONSTANTS.CURRENT_USER, JSON.stringify(response.responseData));
+            }
+            res(response.responseData.userId)
+        }).catch(() => {
+            rej(null)
+        })
     })
 };
 
@@ -54,6 +59,13 @@ export const getUserInfo = ({ commit }) => {
             }
             commit('USER_INFO_ERROR', err);
         });
+};
+
+export const updateAvatar = ({ commit }, payload) => {
+    commit('USER_INFO', payload);
+    if(typeof localStorage !== 'undefined' && localStorage.getItem(CONSTANTS.CURRENT_USER)){
+        localStorage.setItem(CONSTANTS.CURRENT_USER, JSON.stringify(payload))
+    }
 };
 
 export const resetPassUser = ({ commit }, data) => {

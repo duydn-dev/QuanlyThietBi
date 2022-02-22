@@ -1,3 +1,0 @@
-2022-01-10 08:23:12.589 +07:00 [INF] Starting web host
-2022-01-10 10:55:57.258 +07:00 [INF] Starting web host
-2022-01-10 16:50:46.457 +07:00 [INF] Starting web host

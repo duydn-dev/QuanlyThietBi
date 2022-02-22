@@ -184,6 +184,7 @@ namespace Neac.BusinessLogic.Repository
         {
             try
             {
+                var r = await _unitOfWork.GetRepository<User>().GetByExpression(n => n.UserName == userName).Include(n => n.UserRoles).Include(n => n.UserPosition).FirstOrDefaultAsync();
                 return Response<User>.CreateSuccessResponse(await _unitOfWork.GetRepository<User>().GetByExpression(n => n.UserName == userName).Include(n => n.UserRoles).Include(n => n.UserPosition).FirstOrDefaultAsync());
             }
             catch (Exception ex)

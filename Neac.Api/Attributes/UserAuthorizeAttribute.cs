@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Neac.BusinessLogic.Contracts;
+using Neac.BusinessLogic.UnitOfWork;
+using Neac.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -52,6 +54,7 @@ namespace Neac.Api.Attributes
             {
                 var cacheService = context.HttpContext.RequestServices.GetRequiredService<IMemoryCache>();
                 var userService = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
+                var unitOfWorkService = context.HttpContext.RequestServices.GetRequiredService<IUnitOfWork>();
                 var responseUser = await userService.GetUserByUserName(context.HttpContext.User.Identity.Name);
                 // là admin thì cho qua
                 if (responseUser.ResponseData.UserPosition.IsAdministrator.Value)
@@ -61,7 +64,12 @@ namespace Neac.Api.Attributes
                 else
                 {
                     // không phải admin thì check quyền
-                    var roles = responseUser.ResponseData?.UserRoles?.Select(n => n?.Role?.RoleCode);
+                    var roles = (from u in unitOfWorkService.GetRepository<User>().GetAll()
+                              join ur in unitOfWorkService.GetRepository<UserRole>().GetAll() on u.UserId equals ur.UserId
+                              join r in unitOfWorkService.GetRepository<Role>().GetAll() on ur.RoleId equals r.RoleId
+                              where u.UserName == context.HttpContext.User.Identity.Name
+                              select r.RoleCode);
+                     //var roles = responseUser.ResponseData?.UserRoles?.Select(n => n?.Role?.RoleCode);
 
                     string controllerName = context.ActionDescriptor.RouteValues["controller"].ToString();
                     string actionName = context.ActionDescriptor.RouteValues["action"].ToString();

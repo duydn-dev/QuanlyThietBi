@@ -30,26 +30,75 @@
                             <td>{{ item.userName }}</td>
                             <td>{{ item.fullName }}</td>
                             <td class="btn-wrap">
-                                <button type="button" class="btn btn-success">
-                                    <i class="bi bi-gear"></i>
-                                    <span>Phân quyền</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    class="btn btn-warning"
-                                    @click="openEdit(item.userId)"
-                                >
-                                    <i class="bi bi-pencil-square"></i>
-                                    <span>Sửa</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    class="btn btn-danger"
-                                    @click="remove(item.userId)"
-                                >
-                                    <i class="bi bi-trash"></i>
-                                    <span>Xóa</span>
-                                </button>
+                                <template v-if="item.isAdministrator">
+                                    <button
+                                        type="button"
+                                        class="btn btn-success"
+                                        @click="openPer(item.userId)"
+                                        v-if="currentUser.isAdministrator"
+                                    >
+                                        <i class="bi bi-gear"></i>
+                                        <span>Phân quyền</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning"
+                                        @click="openEdit(item.userId)"
+                                        v-if="currentUser.isAdministrator"
+                                    >
+                                        <i class="bi bi-pencil-square"></i>
+                                        <span>Sửa</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="btn btn-danger"
+                                        @click="remove(item.userId)"
+                                        v-if="currentUser.isAdministrator"
+                                    >
+                                        <i class="bi bi-trash"></i>
+                                        <span>Xóa</span>
+                                    </button>
+                                </template>
+
+                                <template v-else>
+                                    <button
+                                        type="button"
+                                        class="btn btn-success"
+                                        @click="openPer(item.userId)"
+                                        v-if="
+                                            currentUser.isAdministrator ||
+                                            isAllowPermission(['Role-UpdateUserRole'])
+                                        "
+                                    >
+                                        <i class="bi bi-gear"></i>
+                                        <span>Phân quyền</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="btn btn-warning"
+                                        @click="openEdit(item.userId)"
+                                        v-if="
+                                            currentUser.isAdministrator ||
+                                            isAllowPermission(['User-Update']) ||
+                                            currentUser.userId == item.createdBy
+                                        "
+                                    >
+                                        <i class="bi bi-pencil-square"></i>
+                                        <span>Sửa</span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="btn btn-danger"
+                                        @click="remove(item.userId)"
+                                        v-if="
+                                            currentUser.isAdministrator ||
+                                            isAllowPermission(['User-Delete'])
+                                        "
+                                    >
+                                        <i class="bi bi-trash"></i>
+                                        <span>Xóa</span>
+                                    </button>
+                                </template>
                             </td>
                         </tr>
                     </tbody>
@@ -58,15 +107,18 @@
             </div>
         </div>
         <edit v-if="isShowEdit" :userId="editId" @close="close" />
+        <permission v-if="isShowPermission" :userId="editId" @close="permissionClose" />
     </div>
 </template>
 
 <script>
 import edit from './edit.vue';
 import axiosService from '../../core/utils/axiosService';
+import permission from './permission_new.vue';
 export default {
     components: {
         edit,
+        permission,
     },
     data() {
         return {
@@ -74,16 +126,25 @@ export default {
             listUser: [],
             totalRow: 0,
             isShowEdit: false,
+            isShowPermission: false,
             editId: 0,
         };
     },
     methods: {
         async getList() {
-            const response = await axiosService.get(`api/User?request=${this.objData}`);
-            const data = response.data.responseData.data;
-            if (response.data.success) {
-                this.listUser = data;
-                this.totalRow = response.data.responseData.totalData;
+            try {
+                const response = await axiosService.get(`api/User?request=${this.objData}`);
+                const data = response.data.responseData.data;
+                if (response.data.success) {
+                    this.listUser = data;
+                    this.totalRow = response.data.responseData.totalData;
+                }
+            } catch (ex) {
+                this.$message(
+                    'Bạn không có quyền hoặc phiên đăng nhập đã hết hạn, vui lòng thử lại !',
+                    'error'
+                );
+                this.$router.push('/');
             }
         },
         async pageChange(pageNum) {
@@ -93,6 +154,10 @@ export default {
         openEdit(id) {
             this.editId = id;
             this.isShowEdit = true;
+        },
+        openPer(id) {
+            this.editId = id;
+            this.isShowPermission = true;
         },
         async remove(id) {
             let conf = await this.$confirm('Bạn có chắc chắn muốn xóa người dùng này ?');
@@ -112,6 +177,10 @@ export default {
             if (isReload) {
                 await this.getList();
             }
+        },
+        async permissionClose(isReload) {
+            if (isReload) await this.getList();
+            this.isShowPermission = false;
         },
     },
     async created() {

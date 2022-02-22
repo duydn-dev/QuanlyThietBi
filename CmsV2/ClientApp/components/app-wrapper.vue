@@ -15,11 +15,12 @@
 </style>
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import axiosService from '../core/utils/axiosService';
 export default {
     name: 'AppWrapper',
     data() {
         return { 
-            done: true, 
+            done: false, 
             error: false,
             versions: [],
             menuIndex: -1, 
@@ -68,7 +69,17 @@ export default {
             );
         },
     },
-    created() {
+    async created() {
+        if((this.currentUser && new Date(this.currentUser.expire) < new Date()) || !this.currentUser){
+            this.logOut();
+            this.done = true;
+        }
+        else {
+            const {data} = await axiosService.get(`api/Role/get-user-role/${this.currentUser.userId}`);
+            this.initSystem({userPermission : data.responseData.roles, allPermission: data.responseData.roles}).then(() => {
+                this.done = true;
+            });
+        }
         // let loading = this.$loading.show();
         // this.initSystem()
         //     .then(() => {

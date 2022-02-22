@@ -162,7 +162,7 @@ export default {
                 return _.find(this.appSettings.companies, ['id', this.appSettings.CompanyId]);
             }
             return this.appSettings.currentCompany;
-        },
+        }
     },
     methods: {
         ...mapActions(['logOut', 'setSidebarMode', 'toggleSidebar']),
