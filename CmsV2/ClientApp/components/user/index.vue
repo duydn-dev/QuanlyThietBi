@@ -16,6 +16,12 @@
         <div class="box-ct box-tbl-ct">
             <div class="tbl-wrap">
                 <table class="tbl">
+                    <colgroup>
+                        <col width="5%">
+                        <col width="30%">
+                        <col width="35%">
+                        <col width="30%">
+                    </colgroup>
                     <thead>
                         <tr>
                             <th>STT</th>
