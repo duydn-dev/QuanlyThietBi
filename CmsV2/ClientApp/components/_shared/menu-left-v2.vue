@@ -36,6 +36,12 @@
                     <strong class="itm-title">Nội dung báo cáo</strong>
                 </router-link>
             </li>
+            <li class="sidenav-itm">
+                <router-link to="/test" class="d-flex align-items-center meet-link">
+                    <i class="bi bi-card-list"></i>
+                    <strong class="itm-title">Test input form</strong>
+                </router-link>
+            </li>
         </ul>
     </div>
 </template>

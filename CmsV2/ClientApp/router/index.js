@@ -46,6 +46,11 @@ let _routers = [
                 component: _import('report/input-data'),
                 meta: { requiresAuth: true }
             },
+            {
+                path: '/test',
+                component: _import('report/test-input-form'),
+                meta: { requiresAuth: true }
+            },
         ]
     },
     {        
