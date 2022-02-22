@@ -28,3 +28,4 @@ Neac.BusinessLogic/obj/Debug/net5.0/Neac.BusinessLogic.csprojAssemblyReference.c
 /CmsV2/.vs/**
 /Core/bin/**
 /Core/obj/**
+CmsV2/wwwroot/dist/js/main-client.js
