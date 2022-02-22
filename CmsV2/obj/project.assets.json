@@ -10280,11 +10280,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\E_Data\\o2Tech\\DTINet5\\QuanlyThietBi\\CmsV2\\Cms.csproj",
+      "projectUniqueName": "D:\\Hoan\\O2_Project\\DTI\\CmsV2\\Cms.csproj",
       "projectName": "Cms",
-      "projectPath": "D:\\E_Data\\o2Tech\\DTINet5\\QuanlyThietBi\\CmsV2\\Cms.csproj",
+      "projectPath": "D:\\Hoan\\O2_Project\\DTI\\CmsV2\\Cms.csproj",
       "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-      "outputPath": "D:\\E_Data\\o2Tech\\DTINet5\\QuanlyThietBi\\CmsV2\\obj\\",
+      "outputPath": "D:\\Hoan\\O2_Project\\DTI\\CmsV2\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -10304,8 +10304,8 @@
         "netcoreapp2.2": {
           "targetAlias": "netcoreapp2.2",
           "projectReferences": {
-            "D:\\E_Data\\o2Tech\\DTINet5\\QuanlyThietBi\\Core\\Core.csproj": {
-              "projectPath": "D:\\E_Data\\o2Tech\\DTINet5\\QuanlyThietBi\\Core\\Core.csproj"
+            "D:\\Hoan\\O2_Project\\DTI\\Core\\Core.csproj": {
+              "projectPath": "D:\\Hoan\\O2_Project\\DTI\\Core\\Core.csproj"
             }
           }
         }
@@ -10365,7 +10365,7 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

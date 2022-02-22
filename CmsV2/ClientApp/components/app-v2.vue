@@ -199,10 +199,10 @@
 @import '/assets-v2/css/bootstrap-icons.css';
 @import '/assets-v2/css/style-common.css';
 @import '/assets-v2/css/common-custom.css';
-footer {
+/* footer {
     position: absolute;
     bottom: 0;
-}
+} */
 </style>
 
 <script>

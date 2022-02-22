@@ -24,6 +24,18 @@
                     <strong class="itm-title">Người dùng</strong>
                 </router-link>
             </li>
+            <li class="sidenav-itm">
+                <router-link to="/roles" class="d-flex align-items-center meet-link">
+                    <i class="bi bi-collection"></i>
+                    <strong class="itm-title">Nhóm quyền</strong>
+                </router-link>
+            </li>
+            <li class="sidenav-itm">
+                <router-link to="/reports" class="d-flex align-items-center meet-link">
+                    <i class="bi bi-card-list"></i>
+                    <strong class="itm-title">Nội dung báo cáo</strong>
+                </router-link>
+            </li>
         </ul>
     </div>
 </template>
