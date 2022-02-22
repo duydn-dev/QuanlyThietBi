@@ -1,0 +1,16 @@
+﻿{
+  "def": "vi",
+  "fallbackLocale": "vi",
+  "langs": [
+    {
+      "code": "vi",
+      "fullCode": "Vietnamese",
+      "sourceCode": "Tiếng Việt"
+    },
+    {
+      "code": "en",
+      "fullCode": "English",
+      "sourceCode": "English"
+    }
+  ]
+}
