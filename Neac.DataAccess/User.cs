@@ -27,6 +27,8 @@ namespace Neac.DataAccess
         public int? Status { get; set; }
         public Guid? UserPositionId { get; set; }
         public Guid? DepartmentId { get; set; }
+        public int? LocalityId { get; set; }
+        public int? LocalityLevel { get; set; }
 
 
         public IList<UserRole> UserRoles { get; set; }

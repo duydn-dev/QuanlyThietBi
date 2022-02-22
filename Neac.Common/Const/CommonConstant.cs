@@ -14,6 +14,11 @@ namespace Neac.Common.Const
             Had = 1,
             Edited = 2
         }
+        public enum UserPositionStatusEnum
+        {
+            NoActive,
+            Active
+        }
     }
     public static class UserStatus
     {

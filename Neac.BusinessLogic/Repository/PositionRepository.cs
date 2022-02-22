@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Neac.Common.Const.CommonConstant;
 
 namespace Neac.BusinessLogic.Repository
 {
@@ -175,7 +176,7 @@ namespace Neac.BusinessLogic.Repository
         {
             try
             {
-                var data = await _unitOfWork.GetRepository<UserPosition>().GetAll().ToListAsync();
+                var data = await _unitOfWork.GetRepository<UserPosition>().GetAll().Where(n => n.Status == (int)UserPositionStatusEnum.Active).ToListAsync();
                 return Response<List<PositonGetDropdownViewDto>>.CreateSuccessResponse(_mapper.Map<List<UserPosition>, List<PositonGetDropdownViewDto>>(data));
             }
             catch(Exception ex)
