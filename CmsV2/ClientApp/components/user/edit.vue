@@ -99,7 +99,7 @@
                 </li>
                 <li class="d-flex flex-column">
                     <label class="txt-tit">Ảnh đại diện</label>
-                    <img :src="`${form.avatar ? (storageUrl + '/' + form.avatar) : '/img/46.png'}`" width="150" height="150" class="m-auto rounded-circle">
+                    <img :src="`${form.avatar ? (storageUrl + '/' + form.avatar) : '/img/46.png'}`" width="150" height="150" class="m-auto preview rounded-circle">
                     <upload-avatar :exts="'png;jpg;jpeg'" :multiple="false" @uploaded="fileUploaded" class="mt-2" />
                 </li>
             </ul>
