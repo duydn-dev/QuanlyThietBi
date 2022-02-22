@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4djT+Q2NGXXdTIHqk8NQLBUdDJF/icHBWGSTS+twvTUEg/NnbqUJ+mEKkdtoj2oyljn8rbLEMqeVBf+Rh0yN5w==",
+  "dgSpecHash": "dGhGm6tF8GgtibrKN9xExSOkCwsa8tjD4fZyNTXo5eF1hIIsPWY4y1EiOuCjlr/H8Kgqp7iHJcjefMKG62mcPQ==",
   "success": true,
-  "projectFilePath": "D:\\E_Data\\o2Tech\\DTINet5\\QuanlyThietBi\\Core\\Core.csproj",
+  "projectFilePath": "D:\\Hoan\\O2_Project\\DTI\\Core\\Core.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\PC\\.nuget\\packages\\microsoft.aspnetcore.antiforgery\\2.2.0\\microsoft.aspnetcore.antiforgery.2.2.0.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",

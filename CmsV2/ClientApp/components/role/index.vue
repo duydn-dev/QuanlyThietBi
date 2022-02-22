@@ -1,112 +1,71 @@
 <template>
-    <wrapper>
-        <template slot="header">
-            <div class="kt-subheader__main">
-                <h3 class="kt-subheader__title">
-                    Quản lý nhóm người dùng
-                </h3>
-
-                <span class="kt-subheader__separator kt-subheader__separator--v" />
-
-                <div id="kt_subheader_search" class="kt-subheader__group">
-                    <form id="kt_subheader_search_form" class="kt-margin-l-20">
-                        <div class="kt-input-icon kt-input-icon--right kt-subheader__search">
-                            <input id="generalSearch"
-                                   type="text"
-                                   class="form-control"
-                                   placeholder="Search..." />
-                            <span class="kt-input-icon__icon kt-input-icon__icon--right">
-                                <span>
-                                    <i class="fa fa-search" />
-                                </span>
-                            </span>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="kt-subheader__toolbar">
-                <button @click="openPopup()" class="btn btn-brand">
-                    <i class="fa fa-plus-square"></i> Tạo mới
+    <div>
+        <div class="box-head d-flex align-items-center justify-content-between">
+            <strong class="txt-head">Quản lý nhóm quyền</strong>
+            <div class="group-right">
+                <button
+                    type="button"
+                    class="btn-evt btn-create js-btnCreate d-flex align-items-center"
+                    @click="openEdit(0)"
+                >
+                    <i class="bi bi-plus"></i>
+                    <span>Tạo mới</span>
                 </button>
-            </div>
-        </template>
-        <div id="kt_content" class="kt-content  kt-grid__item kt-grid__item--fluid">
-            <!--begin::Portlet-->
-            <div class="kt-portlet kt-portlet--mobile">
-                <div class="kt-portlet__body kt-portlet__body--fit">
-                    <!--begin: Datatable -->
-                    <div id="kt_apps_user_list_datatable"
-                         class="kt-datatable kt-datatable--default kt-datatable--brand kt-datatable--loaded">
-                        <table class="kt-datatable__table">
-                            <thead slot="header">
-                                <tr>
-                                    <th>{{ $t('Label.Stt') }}</th>
-                                    <th>{{ $t('Label.Role') }}</th>
-                                    <th class="text-center width-250">
-                                        {{ $t('Label.Action') }}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody v-if="listData">
-                                <tr v-for="(item, index) in listData" :key="item.id">
-                                    <td>{{ index + 1 }}</td>
-                                    <td>{{ item.roleName }}</td>
-                                    <td class="text-center btn-action">
-                                        <button class="btn btn-primary"
-                                                :title="$t('Label.PermissionSetup')"
-                                                @click="openPopupSetting(item.id, item.roleName)">
-                                            <i class="fa fa-cog" />
-                                        </button>
-                                        <button class="btn btn-warning"
-                                                :title="$t('Label.Edit')"
-                                                @click="openPopup(item.id)">
-                                            <i class="fa fa-edit" />
-                                        </button>
-                                        <button class="btn btn-danger"
-                                                :disabled="item.isSystem"
-                                                :title="$t('Label.Remove')"
-                                                @click="remove(item.id)">
-                                            <i class="fa fa-trash-alt" />
-                                        </button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
         </div>
-        <!--end::Portlet-->
-        <modal v-if="popupAdd"
-               id="modal-edit-class"
-               :width="600"
-               :title="roleId > 0 ? 'Cập nhật nhóm người dùng' : 'Tạo mới nhóm người dùng'"
-               @close="popupAdd = false">
-            <div v-if="orderDetail" slot="body">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-                            <label>Tên nhóm</label>
-                            <input v-model="orderDetail.roleName"
-                                   type="text"
-                                   class="form-control"
-                                   placeholder="Nhập tên nhóm" />
-                        </div>
-                    </div>
-                </div>
+        <div class="box-ct box-tbl-ct">
+            <div class="tbl-wrap">
+                <table class="tbl">
+                    <colgroup>
+                        <col width="5%">
+                        <col width="65%">
+                        <col width="30%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th class="text-start">Nhóm quyền</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, i) in listPosition" :key="item.id">
+                            <td>{{ objData.pageSize * (objData.pageIndex - 1) + i + 1 }}</td>
+                            <td class="text-start">{{ item.userPositionName }}</td>
+                            <td class="btn-wrap">
+                                <button type="button" class="btn btn-success">
+                                    <i class="bi bi-gear"></i>
+                                    <span>Phân quyền</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    class="btn btn-warning"
+                                    @click="openEdit(item.userId)"
+                                >
+                                    <i class="bi bi-pencil-square"></i>
+                                    <span>Sửa</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    class="btn btn-danger"
+                                    @click="remove(item.userId)"
+                                >
+                                    <i class="bi bi-trash"></i>
+                                    <span>Xóa</span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pagerv2 :total="totalRow" :page-index="objData.pageIndex" @change="pageChange" />
             </div>
-            <div slot="footer">
-                <button class="btn btn-primary" @click="save()">
-                    <span>{{ $t('Label.Save') }}</span>
-                </button>
-            </div>
-        </modal>
-        <permission v-if="popupSetting" :id="roleId" :name="roleName" @closePopup="popupSetting = false" />
-    </wrapper>
+        </div>
+        <permission v-if="isShowEdit" :userId="editId" @close="close" />
+    </div>
 </template>
 <script>
     import permission from './permission'
+    import axiosService from '../../core/utils/axiosService';
     export default {
         name: 'RoleIndex',
         components: {
@@ -114,133 +73,53 @@
         },
         data() {
             return {
-                popupAdd: false,
-                popupSetting: false,
-                roleName: '',
-                roleId: 0,
-                isUpdateUser: false,
-                listData: [],
-                orderDetail: {
-                    id: 0,
-                    roleName: ''
-                }
+                objData: { pageIndex: 1, pageSize: 20, textSearch: '' },
+                listPosition: [],
+                totalRow: 0,
+                isShowEdit: false,
+                editId: 0,
             };
         },
-        watch: {
-        },
-        created() {
-            this.getList();
-        },
+        
         methods: {
-            openPopup(id) {
-                this.orderDetail.id = id || 0;
-                this.popupAdd = true;
-                if (this.orderDetail.id > 0) this.getDetail();
-                else
-                    this.orderDetail = {
-                        id: 0,
-                        name: '',
-                        nameJP: ''
-                    };
-            },
-            closePopup() {
-                this.popupAdd = false;
-            },
-            openPopupSetting(roleId, roleName) {
-                this.roleId = roleId;
-                this.roleName = roleName;
-                this.popupSetting = true;
-            },
-            closePopupSetting() {
-                this.popupSetting = false;
-            },
-            getList() {
-                let loading = this.$loading.show();
-                this.$http({
-                    data: {
-                        m: 'security',
-                        fn: 'role_get_list'
-                    }
-                })
-                    .then(response => {
-                        loading.hide();
-                        if (response.success) {
-                            this.listData = response.data;
-                        }
-                    })
-                    .catch(err => {
-                        loading.hide();
-                        return this.$message(err.message, 'error');
-                    });
-            },
-            getDetail() {
-                let loading = this.$loading.show();
-                this.$http({
-                    data: {
-                        m: 'security',
-                        fn: 'role_get_by_id',
-                        id: this.orderDetail.id
-                    }
-                })
-                    .then(response => {
-                        if (response.success) {
-                            this.orderDetail = response.data;
-                        }
-                        loading.hide();
-                    })
-                    .catch(err => {
-                        loading.hide();
-                        return this.$message(err.message, 'error');
-                    });
-            },
-            save() {
-                var me = this;
-                if (me.orderDetail.roleName == '') {
-                    return this.$message('Bạn vui lòng nhập tên vai trò!', 'error');
+            async getList() {
+                const response = await axiosService.get(`api/Position?filter=${this.objData}`);
+                const data = response.data.responseData.data;
+                if (response.data.success) {
+                    this.listPosition = data;
+                    this.totalRow = response.data.responseData.totalData;
                 }
-                let loading = this.$loading.show();
-                this.$http({
-                    data: {
-                        m: 'security',
-                        fn: 'role_save',
-                        ...this.orderDetail
+            },
+            async pageChange(pageNum) {
+                this.$set(this.objData, 'pageIndex', pageNum);
+                await this.getList();
+            },
+            openEdit(id) {
+                this.editId = id;
+                this.isShowEdit = true;
+            },
+            async remove(id) {
+                let conf = await this.$confirm('Bạn có chắc chắn muốn xóa tài khoản này ?');
+                if (conf == undefined) {
+                    const { data } = await axiosService.delete(`api/Role/delete/${id}`);
+                    if (data.success) {
+                        await this.getList();
+                        this.$message('Xóa tài khoản thành công !');
+                    } else {
+                        this.$message('Xóa tài khoản thất bại !', 'error');
                     }
-                })
-                    .then(() => {
-                        loading.hide();
-                        this.closePopup();
-                        this.$message(this.$t('Label.Successful'));
-                        me.getList();
-                    })
-                    .catch(err => {
-                        loading.hide();
-                        return this.$message(err.message, 'error');
-                    });
+                }
             },
-            remove(id) {
-                this.$confirm('Xóa vai trò?').then(() => {
-                    let loading = this.$loading.show();
-                    this.$http({
-                        data: {
-                            m: 'security',
-                            fn: 'role_remove',
-                            id: id
-                        }
-                    })
-                        .then(response => {
-                            if (response.success) {
-                                loading.hide();
-                                this.getList();
-                            }
-                            loading.hide();
-                        })
-                        .catch(err => {
-                            loading.hide();
-                            return this.$message(err.message, 'error');
-                        });
-                });
+            async close(isReload) {
+                this.editId = 0;
+                this.isShowEdit = false;
+                if (isReload) {
+                    await this.getList();
+                }
             },
-
-        }
+        },
+        async created() {
+            await this.getList();
+        },
     };
 </script>

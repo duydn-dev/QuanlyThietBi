@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "WGsJTJKwasloQdZv4JfF5eF5GtQidlK+og3hyuKXnZXGTsVUfT0IGHJK8ftSR+uwTQeIVwYOZbSSOgubb0FpBw==",
+  "dgSpecHash": "xIlRroWURlhb/vrQT7VcK2uoBpF155W+3PoQoIZHVq2KSN/XUdqwowGYr4kqlYIIxzhEnelPGvfw4NSYQoDxqg==",
   "success": true,
-  "projectFilePath": "D:\\E_Data\\o2Tech\\DTINet5\\QuanlyThietBi\\CmsV2\\Cms.csproj",
+  "projectFilePath": "D:\\Hoan\\O2_Project\\DTI\\CmsV2\\Cms.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\PC\\.nuget\\packages\\microsoft.aspnetcore\\2.2.0\\microsoft.aspnetcore.2.2.0.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\microsoft.aspnetcore.antiforgery\\2.2.0\\microsoft.aspnetcore.antiforgery.2.2.0.nupkg.sha512",
